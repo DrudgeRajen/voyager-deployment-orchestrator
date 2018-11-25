@@ -7,7 +7,7 @@ class VoyagerDeploymentOrchestratorSeeder extends Seeder
 {
     use Seedable;
 
-    protected $seedersPath = "database/breads/seeds/";
+    protected $seedersPath = 'database/breads/seeds/';
 
     /**
      * Run the database seeds.
