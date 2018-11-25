@@ -1,6 +1,6 @@
 <?php
 
-namespace DrudgeRajen\VoyagerDeploymentOrchestra\OrchestraHandlers;
+namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Events\BreadChanged;
