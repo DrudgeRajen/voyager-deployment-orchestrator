@@ -14,8 +14,12 @@ Still this package is in heavy ***WIP !!!***
 
 ```composer require drudge-rajen/voyager-deployment-orchestrator```
 
+Don't forget to publish the orchestrator seeder file.
+
+``php artisan vendor:publish``
+
 ### Future Tasks
-- [x] Generating Files On BREAD Events.
+- [x] Generating Seed Files On BREAD Events.
 
 - [ ] Writing Tests
 
