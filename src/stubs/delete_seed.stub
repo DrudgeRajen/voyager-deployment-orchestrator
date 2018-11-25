@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use TCG\Voyager\Models\DataType;
+use TCG\Voyager\Facades\Voyager;
+use TCG\Voyager\Models\MenuItem;
+
+class {{class}} extends Seeder
+{
+
+    /**
+     * Auto generated seed file
+     *
+     * @return void
+     */
+    public function run()
+    {
+       {{delete_statements}}
+
+       {{permission_delete_statements}}
+
+       {{menu_delete_statements}}
+    }
+}
