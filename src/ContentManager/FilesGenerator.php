@@ -126,7 +126,7 @@ class FilesGenerator
     {
         $databaseSeederPath = $this->deploymentFileSystem->getSeedFolderPath();
 
-        $seederClassname = 'VoyagerDeploymentOrchestraSeeder';
+        $seederClassname = 'VoyagerDeploymentOrchestratorSeeder';
 
         $file = $this->deploymentFileSystem->getSeederFile($seederClassname, $databaseSeederPath);
 

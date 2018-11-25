@@ -3,11 +3,11 @@
 use Illuminate\Database\Seeder;
 use TCG\Voyager\Traits\Seedable;
 
-class VoyagerDeploymentOrchestraSeeder extends Seeder
+class VoyagerDeploymentOrchestratorSeeder extends Seeder
 {
     use Seedable;
 
-    protected $seedersPath;
+    protected $seedersPath = "database/breads/seeds/";
 
     /**
      * Run the database seeds.

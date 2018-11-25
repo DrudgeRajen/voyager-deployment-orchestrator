@@ -5,10 +5,8 @@ It's easy to create admin tool for CMS using it awesome features ```BREAD```.
 
 Voyager has limitation for the deployment (after you finish the work, create bread and need to publish in production. :) )
 
-Voyager Deployment Orchestra is the package which will listen ```BREAD  Events``` (Add, Update Delete) and will generate
+Voyager Deployment Orchestrator is the package which will listen ```BREAD  Events``` (Add, Update Delete) and will generate
 files, so that BREAD data can be easily seeded.
-
-Still this package is in heavy ***WIP !!!***
 
 ### Installation
 
@@ -17,6 +15,20 @@ Still this package is in heavy ***WIP !!!***
 Don't forget to publish the orchestrator seeder file.
 
 ``php artisan vendor:publish``
+
+After Publishing the ``VoyagerDeploymentOrchestratorSeeder`` class file
+autoload the composer so that laravel knows about the seeder.
+
+``composer dump-autoload``
+
+### Usage
+Voyager Fires Events on Insert, Update, and Delete of BREAD.
+This package listens to those events and creates the respective seeder files.
+
+To run the seeder file :
+
+``php artisan db:seed --class=VoyagerDeploymentOrchestratorSeeder``
+
 
 ### Future Tasks
 - [x] Generating Seed Files On BREAD Events.
