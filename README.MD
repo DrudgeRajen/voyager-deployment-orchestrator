@@ -1,4 +1,4 @@
-![StyleCI](https://github.styleci.io/repos/157413686/shield?branch=master)
+[![StyleCI](https://github.styleci.io/repos/159037396/shield?branch=master)](https://github.styleci.io/repos/159037396)
 ### Introduction
 <a href = "https://github.com/the-control-group/voyager">Voyager </a> is an awesome admin tool for laravel.
 It's easy to create admin tool for CMS using it awesome features ```BREAD```.
