@@ -67,14 +67,14 @@ class ContentGenerator
     public function getDeleteStatement($dataType): string
     {
         $delete = <<<'TXT'
-\$dataType = DataType::find('10');
+$dataType = DataType::find('10');
 
-            if (is_bread_translatable(\$dataType)) {
-                \$dataType->deleteAttributeTranslations(\$dataType->getTranslatableAttributes());
+            if (is_bread_translatable($dataType)) {
+                $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
             }
 
-            if (\$dataType) {
-                \$dataType->destroy(10);
+            if ($dataType) {
+                $dataType->destroy(10);
             }
 TXT;
 
@@ -90,10 +90,10 @@ TXT;
     public function generateMenuDeleteStatements($dataType) : string
     {
         $menuDelete = <<<'TXT'
-\$menuItem = MenuItem::where('route', 'voyager.\$dataType->slug.index');
+$menuItem = MenuItem::where('route', 'voyager.$dataType->slug.index');
 
-        if (\$menuItem->exists()) {
-        \$menuItem->delete();
+        if ($menuItem->exists()) {
+        $menuItem->delete();
         }
 TXT;
 
@@ -111,12 +111,12 @@ TXT;
     public function getPermissionStatement($dataType, $type = null) : string
     {
         $permission = <<<'TXT'
-Voyager::model('Permission')->generateFor(\$dataType->name);
+Voyager::model('Permission')->generateFor($dataType->name);
 TXT;
 
         if (! is_null($type)) {
             $permission = <<<'TXT'
-Voyager::model('Permission')->removeFrom(\$dataType->name);
+Voyager::model('Permission')->removeFrom($dataType->name);
 TXT;
         }
 
@@ -132,24 +132,24 @@ TXT;
     public function getMenuInsertStatements($dataType) : string
     {
         $menu = <<<'TXT'
-\$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
+$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
 
-            \$menuItem = MenuItem::firstOrNew([
-                'menu_id' => \$menu->id,
+            $menuItem = MenuItem::firstOrNew([
+                'menu_id' => $menu->id,
                 'title' => 'Credit Cards',
                 'url' => '',
                 'route' => 'voyager.credit-cards.index',
             ]);
 
-            \$order = Voyager::model('MenuItem')->highestOrderMenuItem();
+            $order = Voyager::model('MenuItem')->highestOrderMenuItem();
 
-            if (!\$menuItem->exists) {
-                \$menuItem->fill([
+            if (!$menuItem->exists) {
+                $menuItem->fill([
                     'target' => '_self',
                     'icon_class' => '',
                     'color' => null,
                     'parent_id' => null,
-                    'order' => \$order,
+                    'order' => $order,
                 ])->save();
             }
 TXT;
