@@ -67,7 +67,7 @@ class ContentGenerator
      */
     public function getDeleteStatement($dataType): string
     {
-        $delete = <<<TXT
+        $delete = <<<'TXT'
 \$dataType = DataType::find('10');
 
             if (is_bread_translatable(\$dataType)) {
@@ -109,7 +109,7 @@ TXT;
      */
     public function getPermissionStatement($dataType, $type = null) : string
     {
-        $permission = <<<TXT
+        $permission = <<<'TXT'
 Voyager::model('Permission')->generateFor(\$dataType->name);
 TXT;
 
@@ -130,7 +130,7 @@ TXT;
      */
     public function getMenuInsertStatements($dataType) : string
     {
-        $menu = <<<TXT
+        $menu = <<<'TXT'
 \$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
 
             \$menuItem = MenuItem::firstOrNew([
