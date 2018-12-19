@@ -96,6 +96,7 @@ TXT;
         \$menuItem->delete();
         }
 TXT;
+
         return $menuDelete;
     }
 
