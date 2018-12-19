@@ -57,7 +57,6 @@ class ContentGenerator
         return $content;
     }
 
-
     /**
      * Get Delete Statement.
      *
@@ -78,6 +77,7 @@ class ContentGenerator
                 \$dataType->destroy(10);
             }
 TXT;
+
         return $delete;
     }
 
@@ -89,7 +89,7 @@ TXT;
      */
     public function generateMenuDeleteStatements($dataType) : string
     {
-        $menuDelete = <<<TXT
+        $menuDelete = <<<'TXT'
 \$menuItem = MenuItem::where('route', 'voyager.\$dataType->slug.index');
 
         if (\$menuItem->exists()) {
@@ -114,7 +114,7 @@ Voyager::model('Permission')->generateFor(\$dataType->name);
 TXT;
 
         if (! is_null($type)) {
-            $permission = <<<TXT
+            $permission = <<<'TXT'
 Voyager::model('Permission')->removeFrom(\$dataType->name);
 TXT;
         }
