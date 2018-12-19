@@ -4,14 +4,25 @@ use Illuminate\Database\Seeder;
 
 class {{class}} extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function run()
     {
-        {{insert_statements}}
+        try {
+           \DB::beginTransaction();
+
+           {{insert_statements}}
+        } catch(Exception $e) {
+            throw new Exception('exception occur ' . $e);
+
+            \DB::rollBack();
+        }
+
+        \DB::commit();
     }
 }
