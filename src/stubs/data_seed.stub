@@ -8,20 +8,31 @@ use TCG\Voyager\Models\MenuItem;
 
 class {{class}} extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function run()
     {
-        {{delete_statements}}
+        try {
+            \DB::beginTransaction();
 
-        {{insert_statements}}
+            {{delete_statements}}
 
-        {{permission_insert_statements}}
+            {{insert_statements}}
 
-        {{menu_insert_statements}}
+            {{permission_insert_statements}}
+
+            {{menu_insert_statements}}
+        } catch(Exception $e) {
+           throw new Exception('Exception occur ' . $e);
+
+           \DB::rollBack();
+        }
+
+        DB::commit();
     }
 }

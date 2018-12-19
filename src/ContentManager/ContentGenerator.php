@@ -25,7 +25,7 @@ class ContentGenerator
             : preg_replace("/[0-9]+ \=\>/i", '', var_export($array, true));
         $lines = explode("\n", $content);
         $inString = false;
-        $tabCount = 3;
+        $tabCount = 4;
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);
             //Check for closing bracket
@@ -66,26 +66,17 @@ class ContentGenerator
      */
     public function getDeleteStatement($dataType): string
     {
-        $delete = '';
-        $delete .= "\$dataType = DataType::find('" . $dataType->id . "');";
-        $delete .= $this->addNewLines($delete, 2);
-        $delete .= $this->addIndent($delete, 2);
-        $delete .= 'if (is_bread_translatable($dataType)) {';
-        $delete .= $this->addNewLines($delete);
-        $delete .= $this->addIndent($delete, 3);
-        $delete .= '$dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());';
-        $delete .= $this->addNewLines($delete);
-        $delete .= $this->addIndent($delete, 3);
-        $delete .= '}';
-        $delete .= $this->addNewLines($delete, 2);
-        $delete .= $this->addIndent($delete, 2);
-        $delete .= 'if ($dataType) {';
-        $delete .= $this->addNewLines($delete);
-        $delete .= $this->addIndent($delete, 3);
-        $delete .= '$dataType->destroy(' . $dataType->id . ');';
-        $delete .= $this->addNewLines($delete);
-        $delete .= $this->addIndent($delete, 2);
-        $delete .= '}';
+        $delete = <<<'TXT'
+\$dataType = DataType::find('10');
+
+            if (is_bread_translatable(\$dataType)) {
+                \$dataType->deleteAttributeTranslations(\$dataType->getTranslatableAttributes());
+            }
+
+            if (\$dataType) {
+                \$dataType->destroy(10);
+            }
+TXT;
 
         return $delete;
     }
@@ -93,22 +84,18 @@ class ContentGenerator
     /**
      * Generate Menu Delete Statements.
      *
-     * @param $dataArray
+     * @param $dataType
      * @return string
      */
     public function generateMenuDeleteStatements($dataType) : string
     {
-        $menuDelete = '';
-        $menuDelete .= "\$menuItem = MenuItem::where('route', 'voyager." . $dataType->slug . ".index');";
-        $menuDelete .= $this->addNewLines($menuDelete, 2);
-        $menuDelete .= $this->addIndent($menuDelete, 2);
-        $menuDelete .= 'if ($menuItem->exists()) {';
-        $menuDelete .= $this->addNewLines($menuDelete);
-        $menuDelete .= $this->addIndent($menuDelete, 2);
-        $menuDelete .= '$menuItem->delete();';
-        $menuDelete .= $this->addNewLines($menuDelete);
-        $menuDelete .= $this->addIndent($menuDelete, 2);
-        $menuDelete .= '}';
+        $menuDelete = <<<'TXT'
+\$menuItem = MenuItem::where('route', 'voyager.\$dataType->slug.index');
+
+        if (\$menuItem->exists()) {
+        \$menuItem->delete();
+        }
+TXT;
 
         return $menuDelete;
     }
@@ -116,17 +103,21 @@ class ContentGenerator
     /**
      * Get Permission Statements.
      *
-     * @param $dataArray
+     * @param $dataType
      * @param null $type
      *
      * @return string
      */
     public function getPermissionStatement($dataType, $type = null) : string
     {
-        $permission = "Voyager::model('Permission')->generateFor('" . $dataType->name . "');";
+        $permission = <<<'TXT'
+Voyager::model('Permission')->generateFor(\$dataType->name);
+TXT;
 
         if (! is_null($type)) {
-            $permission = "Voyager::model('Permission')->removeFrom('" . $dataType->name . "');";
+            $permission = <<<'TXT'
+Voyager::model('Permission')->removeFrom(\$dataType->name);
+TXT;
         }
 
         return $permission;
@@ -135,91 +126,35 @@ class ContentGenerator
     /**
      * Get Menu Insert Statements.
      *
-     * @param $dataArray
+     * @param $dataType
      * @return string
      */
     public function getMenuInsertStatements($dataType) : string
     {
-        $menu = '';
-        $menu .= "\$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();";
-        $this->addNewLines($menu, 2);
-        $this->addIndent($menu, 2);
-        $menu .= '$menuItem = MenuItem::firstOrNew([';
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= "'menu_id' => \$menu->id,";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= "'title'   => '" . $dataType->display_name_plural . "',";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= "'url'     => '',";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= "'route'   => 'voyager." . $dataType->slug . ".index',";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 2);
-        $menu .= ']);';
-        $this->addNewLines($menu, 2);
-        $this->addIndent($menu, 2);
-        $menu .= "\$order = Voyager::model('MenuItem')->highestOrderMenuItem();";
-        $this->addNewLines($menu, 2);
-        $this->addIndent($menu, 2);
-        $menu .= 'if (!$menuItem->exists) {';
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= '$menuItem->fill([';
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 4);
-        $menu .= "'target'     => '_self',";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 4);
-        $menu .= "'icon_class' => '" . $dataType->icon . "',";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 4);
-        $menu .= "'color'      => null,";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 4);
-        $menu .= "'parent_id'  => null,";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 4);
-        $menu .= "'order'      => \$order,";
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 3);
-        $menu .= '])->save();';
-        $this->addNewLines($menu);
-        $this->addIndent($menu, 2);
-        $menu .= '}';
+        $menu = <<<'TXT'
+\$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
+
+            \$menuItem = MenuItem::firstOrNew([
+                'menu_id' => \$menu->id,
+                'title' => 'Credit Cards',
+                'url' => '',
+                'route' => 'voyager.credit-cards.index',
+            ]);
+
+            \$order = Voyager::model('MenuItem')->highestOrderMenuItem();
+
+            if (!\$menuItem->exists) {
+                \$menuItem->fill([
+                    'target' => '_self',
+                    'icon_class' => '',
+                    'color' => null,
+                    'parent_id' => null,
+                    'order' => \$order,
+                ])->save();
+            }
+TXT;
 
         return $menu;
-    }
-
-    /**
-     * Adds indentation to the passed content reference.
-     *
-     * @param string $content
-     * @param int $numberOfIndents
-     */
-    private function addIndent(&$content, $numberOfIndents = 1)
-    {
-        while ($numberOfIndents > 0) {
-            $content .= $this->indentCharacter;
-            $numberOfIndents--;
-        }
-    }
-
-    /**
-     * Adds new lines to the passed content variable reference.
-     *
-     * @param string $content
-     * @param int $numberOfLines
-     */
-    private function addNewLines(&$content, $numberOfLines = 1)
-    {
-        while ($numberOfLines > 0) {
-            $content .= $this->newLineCharacter;
-            $numberOfLines--;
-        }
     }
 
     /**
