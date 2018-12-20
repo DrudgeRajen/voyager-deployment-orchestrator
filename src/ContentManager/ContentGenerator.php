@@ -10,6 +10,52 @@ class ContentGenerator
     /** @var string */
     private $newLineCharacter = PHP_EOL;
 
+    /** @var string Data type Delete Statement */
+    const DELETE_STATMENT = <<<'TXT'
+$dataType = DataType::find(%s);
+
+            if (is_bread_translatable($dataType)) {
+                $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
+            }
+
+            if ($dataType) {
+                $dataType->destroy(%s);
+            }
+TXT;
+
+    /** @var string Menu Insert Statement */
+    const MENU_INSERT_STATEMENT = <<<'TXT'
+$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
+
+            $menuItem = MenuItem::firstOrNew([
+                'menu_id' => $menu->id,
+                'title' => '%s',
+                'url' => '',
+                'route' => 'voyager.%s.index',
+            ]);
+
+            $order = Voyager::model('MenuItem')->highestOrderMenuItem();
+
+            if (!$menuItem->exists) {
+                $menuItem->fill([
+                    'target' => '_self',
+                    'icon_class' => '%s',
+                    'color' => null,
+                    'parent_id' => null,
+                    'order' => $order,
+                ])->save();
+            }
+TXT;
+
+    /** @var string Menu Delete Statement */
+    const MENU_DELETE_STATEMENT = <<<'TXT'
+$menuItem = MenuItem::where('route', 'voyager.%s.index');
+
+        if ($menuItem->exists()) {
+        $menuItem->delete();
+        }
+TXT;
+
     /**
      * Format Content.
      *
@@ -60,25 +106,12 @@ class ContentGenerator
     /**
      * Get Delete Statement.
      *
-     * @param $dataArray
-     *
+     * @param $dataType
      * @return string
      */
     public function getDeleteStatement($dataType): string
     {
-        $delete = <<<'TXT'
-$dataType = DataType::find('10');
-
-            if (is_bread_translatable($dataType)) {
-                $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
-            }
-
-            if ($dataType) {
-                $dataType->destroy(10);
-            }
-TXT;
-
-        return $delete;
+        return sprintf(self::DELETE_STATMENT, $dataType->id, $dataType->id);
     }
 
     /**
@@ -89,15 +122,7 @@ TXT;
      */
     public function generateMenuDeleteStatements($dataType) : string
     {
-        $menuDelete = <<<'TXT'
-$menuItem = MenuItem::where('route', 'voyager.$dataType->slug.index');
-
-        if ($menuItem->exists()) {
-        $menuItem->delete();
-        }
-TXT;
-
-        return $menuDelete;
+        return sprintf(self::MENU_DELETE_STATEMENT, $dataType->slug);
     }
 
     /**
@@ -111,16 +136,16 @@ TXT;
     public function getPermissionStatement($dataType, $type = null) : string
     {
         $permission = <<<'TXT'
-Voyager::model('Permission')->generateFor($dataType->name);
+Voyager::model('Permission')->generateFor('%s');
 TXT;
 
         if (! is_null($type)) {
             $permission = <<<'TXT'
-Voyager::model('Permission')->removeFrom($dataType->name);
+Voyager::model('Permission')->removeFrom('%s');
 TXT;
         }
 
-        return $permission;
+        return sprintf($permission, $dataType->name);
     }
 
     /**
@@ -131,30 +156,12 @@ TXT;
      */
     public function getMenuInsertStatements($dataType) : string
     {
-        $menu = <<<'TXT'
-$menu = Menu::where('name', config('voyager.bread.default_menu'))->firstOrFail();
-
-            $menuItem = MenuItem::firstOrNew([
-                'menu_id' => $menu->id,
-                'title' => 'Credit Cards',
-                'url' => '',
-                'route' => 'voyager.credit-cards.index',
-            ]);
-
-            $order = Voyager::model('MenuItem')->highestOrderMenuItem();
-
-            if (!$menuItem->exists) {
-                $menuItem->fill([
-                    'target' => '_self',
-                    'icon_class' => '',
-                    'color' => null,
-                    'parent_id' => null,
-                    'order' => $order,
-                ])->save();
-            }
-TXT;
-
-        return $menu;
+        return sprintf(
+            self::MENU_INSERT_STATEMENT,
+            $dataType->display_name_plural,
+            $dataType->slug,
+            $dataType->icon
+        );
     }
 
     /**
