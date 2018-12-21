@@ -92,11 +92,33 @@ class ContentManager
                     $this->contentGenerator->getMenuInsertStatements($dataType),
                     $stub
                 );
+                $dataTypeArray = $dataType->toArray();
+
+                if (isset($dataTypeArray['translations'])) {
+                    $translations = $this->repackContentData($dataTypeArray['translations']);
+
+                    $translationInsertStatement = '';
+
+                    $translationInsertStatement .= sprintf(
+                        "\DB::table('%s')->insert(%s);",
+                        'translations',
+                        $this->contentGenerator->formatContent($translations)
+                    );
+
+                    $stub = str_replace('{{translation_insert_statements}}', $translationInsertStatement, $stub);
+                    unset($dataTypeArray['translations']);
+                } else {
+                    $stub = str_replace('{{translation_insert_statements}}',
+                        '',
+                        $stub
+                    );
+                }
+
 
                 $inserts .= sprintf(
                     "\DB::table('%s')->insert(%s);",
                     $tableName,
-                    $this->contentGenerator->formatContent($dataType->toArray())
+                    $this->contentGenerator->formatContent($dataTypeArray)
                 );
 
                 $stub = str_replace('{{insert_statements}}', $inserts, $stub);
