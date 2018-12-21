@@ -26,3 +26,4 @@ class {{class}} extends Seeder
         \DB::commit();
     }
 }
+

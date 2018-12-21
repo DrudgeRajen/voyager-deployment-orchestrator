@@ -12,6 +12,8 @@ class {{class}} extends Seeder
      * Auto generated seed file
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function run()
     {
