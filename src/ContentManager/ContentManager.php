@@ -114,7 +114,6 @@ class ContentManager
                     );
                 }
 
-
                 $inserts .= sprintf(
                     "\DB::table('%s')->insert(%s);",
                     $tableName,
