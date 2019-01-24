@@ -12,14 +12,14 @@ class ContentGenerator
 
     /** @var string Data type Delete Statement */
     const DELETE_STATMENT = <<<'TXT'
-$dataType = DataType::where('name' , '%s');
+$dataType = DataType::where('name' , '%s')->first();
 
             if (is_bread_translatable($dataType)) {
                 $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
             }
 
             if ($dataType) {
-                $dataType->where('name', '%s')->delete();
+                DataType::where('name', '%s')->delete();
             }
 TXT;
 
