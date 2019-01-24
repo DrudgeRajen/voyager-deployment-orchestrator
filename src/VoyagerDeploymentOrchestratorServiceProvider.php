@@ -12,7 +12,7 @@ class VoyagerDeploymentOrchestratorServiceProvider extends ServiceProvider
         $publishablePath = dirname(__DIR__) . '/publishable';
         $publishable = [
             'seeds' => [
-                "{$publishablePath}/database/seeds/" => database_path('seeds/breads')
+                "{$publishablePath}/database/seeds/" => database_path('seeds/breads'),
             ],
             'config' => [
                 "{$publishablePath}/config/voyager-deployment-orchestrator.php" => config_path('voyager-deployment-orchestrator.php'),
