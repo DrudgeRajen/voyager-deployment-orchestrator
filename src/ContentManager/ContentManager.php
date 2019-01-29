@@ -40,6 +40,10 @@ class ContentManager
                         $columnValue = json_encode($columnValue);
                     }
                     $rowArray[$columnName] = $columnValue;
+
+                    if ($columnName === 'id') {
+                        unset($rowArray[$columnName]);
+                    }
                 }
                 $dataArray[] = $rowArray;
             }
