@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use TCG\Voyager\Models\DataType;
 
 class {{class}} extends Seeder
 {
@@ -14,9 +15,11 @@ class {{class}} extends Seeder
     public function run()
     {
         try {
-           \DB::beginTransaction();
+            \DB::beginTransaction();
 
-           {{insert_statements}}
+            {{datatype_slug_statement}}
+
+            {{insert_statements}}
         } catch(Exception $e) {
             throw new Exception('exception occur ' . $e);
 

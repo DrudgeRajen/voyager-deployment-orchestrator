@@ -28,9 +28,6 @@ class ContentManager
      */
     public function repackContentData($data) : array
     {
-        if (! is_array($data)) {
-            $data = $data->toArray();
-        }
         $dataArray = [];
         if (! empty($data)) {
             foreach ($data as $row) {
@@ -43,6 +40,13 @@ class ContentManager
 
                     if ($columnName === 'id') {
                         unset($rowArray[$columnName]);
+                    }
+
+                    if ($columnName === 'data_type_id') {
+                        $rowArray[$columnName] = 'dataTypeId';
+                    }
+                    if ($columnName === 'foreign_key') {
+                        $rowArray[$columnName] = '$dataTypeId';
                     }
                 }
                 $dataArray[] = $rowArray;
@@ -97,6 +101,7 @@ class ContentManager
                     $stub
                 );
                 $dataTypeArray = $dataType->toArray();
+                unset($dataTypeArray['id']);
 
                 if (isset($dataTypeArray['translations'])) {
                     $translations = $this->repackContentData($dataTypeArray['translations']);
@@ -130,9 +135,14 @@ class ContentManager
             case FilesGenerator::ROW_SEEDER_SUFFIX:
                 $rows = $dataType->rows;
 
-                $dataArray = $this->repackContentData($rows);
+                $dataArray = $this->repackContentData($rows->toArray());
 
                 $tableName = $rows->last()->getTable();
+
+                $stub = str_replace('{{datatype_slug_statement}}',
+                    $this->contentGenerator->getDataTypeSlugStatement($dataType),
+                    $stub
+                );
 
                 $inserts .= sprintf(
                     "\DB::table('%s')->insert(%s);",
