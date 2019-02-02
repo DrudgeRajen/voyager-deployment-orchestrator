@@ -60,7 +60,6 @@ TXT;
 $dataType = DataType::where('name', '%s')->first();
 TXT;
 
-
     /**
      * Format Content.
      *
@@ -125,9 +124,11 @@ TXT;
         return sprintf(self::DELETE_STATMENT, $dataType->slug, $dataType->slug);
     }
 
-    public function getDataTypeSlugStatement($dataType): string {
+    public function getDataTypeSlugStatement($dataType) : string
+    {
         return sprintf(self::DATATYPE_SLUG_STATEMENT, $dataType->slug);
     }
+
     /**
      * Generate Menu Delete Statements.
      *

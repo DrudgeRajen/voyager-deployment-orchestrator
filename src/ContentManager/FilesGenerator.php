@@ -207,8 +207,9 @@ class FilesGenerator
     public function addDataTypeId(string $seedContent)
     {
         if (strpos($seedContent, '#dataTypeId') !== 'false') {
-            $seedContent = str_replace('\'#dataTypeId\'', "\$dataType->id", $seedContent);
+            $seedContent = str_replace('\'#dataTypeId\'', '$dataType->id', $seedContent);
         }
+
         return $seedContent;
     }
 }
