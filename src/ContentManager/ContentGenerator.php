@@ -58,7 +58,6 @@ TXT;
 
     const DATATYPE_SLUG_STATEMENT = <<<'TXT'
 $dataType = DataType::where('name', '%s')->first();
-   $dataTypeId = $dataType->id;
 TXT;
 
 

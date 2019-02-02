@@ -43,10 +43,10 @@ class ContentManager
                     }
 
                     if ($columnName === 'data_type_id') {
-                        $rowArray[$columnName] = 'dataTypeId';
+                        $rowArray[$columnName] = '#dataTypeId';
                     }
                     if ($columnName === 'foreign_key') {
-                        $rowArray[$columnName] = '$dataTypeId';
+                        $rowArray[$columnName] = '#dataTypeId';
                     }
                 }
                 $dataArray[] = $rowArray;

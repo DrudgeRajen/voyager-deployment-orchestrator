@@ -62,6 +62,9 @@ class FilesGenerator
             self::TYPE_SEEDER_SUFFIX
         );
 
+        //We replace the #dataTypeId with the $dataTypeId variable
+        // that will exsit in seeder file.
+        $seedContent = $this->addDataTypeId($seedContent);
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
@@ -95,6 +98,10 @@ class FilesGenerator
             $dataType,
             self::ROW_SEEDER_SUFFIX
         );
+
+        //We replace the #dataTypeId with the $dataTypeId variable
+        // that will exsit in seeder file.
+        $seedContent = $this->addDataTypeId($seedContent);
 
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
 
@@ -188,5 +195,20 @@ class FilesGenerator
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
+    }
+
+    /**
+     * Repace with $dataType Variable.
+     *
+     * @param string $seedContent
+     *
+     * @return mixed|string
+     */
+    public function addDataTypeId(string $seedContent)
+    {
+        if (strpos($seedContent, '#dataTypeId') !== 'false') {
+            $seedContent = str_replace('\'#dataTypeId\'', "\$dataType->id", $seedContent);
+        }
+        return $seedContent;
     }
 }
