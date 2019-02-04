@@ -12,9 +12,20 @@ files, so that BREAD data can be easily seeded.
 
 ```composer require drudge-rajen/voyager-deployment-orchestrator```
 
-Don't forget to publish the orchestrator seeder file.
+Publish the default config and seeder file.
 
-``php artisan vendor:publish``
+``php artisan vendor:publish --provider=git@github.com:DrudgeRajen/voyager-deployment-orchestrator.git``
+
+Next, open the `config/voyager-deployment-orchestrator.php` and add the tables name of which BREAD seeders will be generated.
+
+```
+return [
+    'tables' => [
+        users
+    ],
+];
+```
+
 
 After Publishing the ``VoyagerDeploymentOrchestratorSeeder`` class file
 autoload the composer so that laravel knows about the seeder.
@@ -34,8 +45,3 @@ To run the seeder file :
 - [x] Generating Seed Files On BREAD Events.
 
 - [ ] Writing Tests
-
-### Thanks To
-#### <a href ="https://github.com/orangehill/iseed"> Iseed </a>
-
-
