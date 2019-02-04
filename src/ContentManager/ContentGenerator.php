@@ -12,14 +12,14 @@ class ContentGenerator
 
     /** @var string Data type Delete Statement */
     const DELETE_STATMENT = <<<'TXT'
-$dataType = DataType::find(%s);
+$dataType = DataType::where('name' , '%s')->first();
 
             if (is_bread_translatable($dataType)) {
                 $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
             }
 
             if ($dataType) {
-                $dataType->destroy(%s);
+                DataType::where('name', '%s')->delete();
             }
 TXT;
 
@@ -56,6 +56,10 @@ $menuItem = MenuItem::where('route', 'voyager.%s.index');
         }
 TXT;
 
+    const DATATYPE_SLUG_STATEMENT = <<<'TXT'
+$dataType = DataType::where('name', '%s')->first();
+TXT;
+
     /**
      * Format Content.
      *
@@ -69,15 +73,21 @@ TXT;
         $content = ($indexed)
             ? var_export($array, true)
             : preg_replace("/[0-9]+ \=\>/i", '', var_export($array, true));
-        $lines = explode("\n", $content);
         $inString = false;
         $tabCount = 4;
+
+        //replace array() with []
+        $content = str_replace('array (', '[', $content);
+        $content = str_replace(')', ']', $content);
+        $lines = explode("\n", $content);
+
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);
             //Check for closing bracket
-            if (strpos($lines[$i], ')') !== false) {
+            if (strpos($lines[$i], ']') !== false) {
                 $tabCount--;
             }
+
             //Insert tab count
             if ($inString === false) {
                 for ($j = 0; $j < $tabCount; $j++) {
@@ -94,7 +104,7 @@ TXT;
                 }
             }
             //check for openning bracket
-            if (strpos($lines[$i], '(') !== false) {
+            if (strpos($lines[$i], '[') !== false) {
                 $tabCount++;
             }
         }
@@ -111,7 +121,12 @@ TXT;
      */
     public function getDeleteStatement($dataType): string
     {
-        return sprintf(self::DELETE_STATMENT, $dataType->id, $dataType->id);
+        return sprintf(self::DELETE_STATMENT, $dataType->slug, $dataType->slug);
+    }
+
+    public function getDataTypeSlugStatement($dataType) : string
+    {
+        return sprintf(self::DATATYPE_SLUG_STATEMENT, $dataType->slug);
     }
 
     /**
