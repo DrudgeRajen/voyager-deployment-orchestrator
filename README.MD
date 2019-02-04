@@ -14,7 +14,9 @@ files, so that BREAD data can be easily seeded.
 
 Publish the default config and seeder file.
 
-``php artisan vendor:publish --provider=DrudgeRajen\VoyagerDeploymentOrchestrator\VoyagerDeploymentOrchestratorServiceProvider``
+```
+php artisan vendor:publish --provider="DrudgeRajen\VoyagerDeploymentOrchestrator\VoyagerDeploymentOrchestratorServiceProvider"
+```
 
 Next, open the `config/voyager-deployment-orchestrator.php` and add the tables name of which BREAD seeders will be generated.
 
