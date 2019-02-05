@@ -23,6 +23,8 @@ class {{class}} extends Seeder
             {{delete_statements}}
 
             {{insert_statements}}
+
+            {{datatype_slug_statements}}
             {{translation_insert_statements}}
 
             {{permission_insert_statements}}
