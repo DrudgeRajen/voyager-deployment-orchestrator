@@ -105,6 +105,10 @@ class ContentManager
 
                 if (isset($dataTypeArray['translations'])) {
                     $translations = $this->repackContentData($dataTypeArray['translations']);
+                    $stub = str_replace('{{datatype_slug_statements}}',
+                        $this->contentGenerator->getDataTypeSlugStatement($dataType),
+                        $stub
+                    );
 
                     $translationInsertStatement = '';
 

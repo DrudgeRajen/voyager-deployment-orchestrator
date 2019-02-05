@@ -121,12 +121,12 @@ TXT;
      */
     public function getDeleteStatement($dataType): string
     {
-        return sprintf(self::DELETE_STATMENT, $dataType->slug, $dataType->slug);
+        return sprintf(self::DELETE_STATMENT, $dataType->name, $dataType->name);
     }
 
     public function getDataTypeSlugStatement($dataType) : string
     {
-        return sprintf(self::DATATYPE_SLUG_STATEMENT, $dataType->slug);
+        return sprintf(self::DATATYPE_SLUG_STATEMENT, $dataType->name);
     }
 
     /**
