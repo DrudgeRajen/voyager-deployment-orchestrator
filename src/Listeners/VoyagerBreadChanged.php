@@ -7,15 +7,15 @@ use DrudgeRajen\VoyagerDeploymentOrchestrator\VoyagerDeploymentOrchestrator;
 
 class VoyagerBreadChanged
 {
-    private $deploymentOrchestretor;
+    private $deploymentOrchestrator;
 
-    public function __construct(VoyagerDeploymentOrchestrator $orchestretor)
+    public function __construct(VoyagerDeploymentOrchestrator $orchestrator)
     {
-        $this->deploymentOrchestretor = $orchestretor;
+        $this->deploymentOrchestrator = $orchestrator;
     }
 
     public function handle(BreadChanged $breadChanged)
     {
-        return $this->deploymentOrchestretor->handle($breadChanged);
+        return $this->deploymentOrchestrator->handle($breadChanged);
     }
 }
