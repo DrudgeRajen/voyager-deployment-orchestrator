@@ -2,6 +2,6 @@
 
 return [
     'tables' => [
-        //tables names for generating bread seeders.
+        // table names for generating bread seeders.
     ],
 ];

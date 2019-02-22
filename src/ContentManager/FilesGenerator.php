@@ -74,6 +74,7 @@ class FilesGenerator
      * Generate Data Row Seed File.
      *
      * @param $dataType
+     *
      * @return bool
      */
     public function generateDataRowSeedFile($dataType) : bool
