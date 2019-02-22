@@ -62,8 +62,8 @@ class FilesGenerator
             self::TYPE_SEEDER_SUFFIX
         );
 
-        //We replace the #dataTypeId with the $dataTypeId variable
-        // that will exsit in seeder file.
+        // We replace the #dataTypeId with the $dataTypeId variable
+        // that will exist in seeder file.
         $seedContent = $this->addDataTypeId($seedContent);
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
 
@@ -99,8 +99,8 @@ class FilesGenerator
             self::ROW_SEEDER_SUFFIX
         );
 
-        //We replace the #dataTypeId with the $dataTypeId variable
-        // that will exsit in seeder file.
+        // We replace the #dataTypeId with the $dataTypeId variable
+        // that will exist in seeder file.
         $seedContent = $this->addDataTypeId($seedContent);
 
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
@@ -198,7 +198,7 @@ class FilesGenerator
     }
 
     /**
-     * Repace with $dataType Variable.
+     * Replace with $dataType Variable.
      *
      * @param string $seedContent
      *

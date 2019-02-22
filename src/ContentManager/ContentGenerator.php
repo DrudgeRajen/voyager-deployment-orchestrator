@@ -182,8 +182,8 @@ TXT;
     /**
      * Generate Orchestra Seeder Content.
      *
-     * @param $className
-     * @param $content
+     * @param string $className
+     * @param string $content
      *
      * @return mixed|null|string|string[]
      */
