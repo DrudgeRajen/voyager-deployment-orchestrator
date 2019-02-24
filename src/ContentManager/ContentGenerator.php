@@ -76,34 +76,34 @@ TXT;
         $inString = false;
         $tabCount = 4;
 
-        //replace array() with []
+        // replace array() with []
         $content = str_replace('array (', '[', $content);
         $content = str_replace(')', ']', $content);
         $lines = explode("\n", $content);
 
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);
-            //Check for closing bracket
+            // Check for closing bracket
             if (strpos($lines[$i], ']') !== false) {
                 $tabCount--;
             }
 
-            //Insert tab count
+            // Insert tab count
             if ($inString === false) {
                 for ($j = 0; $j < $tabCount; $j++) {
                     $lines[$i] = substr_replace($lines[$i], $this->indentCharacter, 0, 0);
                 }
             }
             for ($j = 0; $j < strlen($lines[$i]); $j++) {
-                //skip character right after an escape \
+                // skip character right after an escape \
                 if ($lines[$i][$j] == '\\') {
                     $j++;
-                } //check string open/end
+                } // check string open/end
                 elseif ($lines[$i][$j] == '\'') {
                     $inString = ! $inString;
                 }
             }
-            //check for openning bracket
+            // check for opening bracket
             if (strpos($lines[$i], '[') !== false) {
                 $tabCount++;
             }
@@ -182,8 +182,8 @@ TXT;
     /**
      * Generate Orchestra Seeder Content.
      *
-     * @param $className
-     * @param $content
+     * @param string $className
+     * @param string $content
      *
      * @return mixed|null|string|string[]
      */

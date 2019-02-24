@@ -33,7 +33,15 @@ class FileSystem
         return implode(PHP_EOL, $buffer);
     }
 
-    public function getSeederFile($name, $path)
+    /**
+     * Get seeder file.
+     *
+     * @param string $name
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getSeederFile(string $name, string $path) : string
     {
         return $path . '/' . $name . '.php';
     }

@@ -57,13 +57,12 @@ class ContentManager
     }
 
     /**
-     * Populate Conent To Stub File.
+     * Populate Content To Stub File.
      *
-     * @param string $tableName
      * @param string $className
      * @param string $stub
-     * @param array $dataArray
-     * @param $suffix
+     * @param DataType $dataType
+     * @param string $suffix
      *
      * @return mixed|string
      */
@@ -190,8 +189,8 @@ class ContentManager
     /**
      * Update Deployment Orchestra Seeder Content.
      *
-     * @param $className
-     * @param $content
+     * @param string $className
+     * @param string $content
      *
      * @return mixed|null|string|string[]
      */
