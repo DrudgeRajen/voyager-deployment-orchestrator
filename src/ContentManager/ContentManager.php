@@ -124,6 +124,10 @@ class ContentManager
                         '',
                         $stub
                     );
+                    $stub = str_replace('{{datatype_slug_statements}}',
+                        '',
+                        $stub
+                    );
                 }
 
                 $inserts .= sprintf(
