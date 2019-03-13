@@ -8,24 +8,37 @@ use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
 
 class BreadDeletedHandler
 {
-    private $deploymentFileGenerator;
+    /** @var FilesGenerator */
+    private $filesGenerator;
 
     /**
      * VoyagerDeleted constructor.
-     * @param FilesGenerator $deploymentFilesGenerator
+     *
+     * @param FilesGenerator $filesGenerator
      */
-    public function __construct(FilesGenerator $deploymentFilesGenerator)
+    public function __construct(FilesGenerator $filesGenerator)
     {
-        $this->deploymentFileGenerator = $deploymentFilesGenerator;
+        $this->filesGenerator = $filesGenerator;
     }
 
-    public function handle(BreadChanged $breadDataDeleted)
+    /**
+     * Bread Deleted Handler
+     *
+     * @param BreadChanged $breadDataDeleted
+     *
+     * @return bool
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function handle(BreadChanged $breadDataDeleted) : bool
     {
         $dataType = $breadDataDeleted->dataType;
+
         // Delete Translations, if present
         if (is_bread_translatable($dataType)) {
             $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
         }
+
         $dataType->destroy($dataType->id);
 
         if (! is_null($dataType)) {
@@ -33,10 +46,10 @@ class BreadDeletedHandler
         }
 
         //Finally, We can delete seed files.
-        $this->deploymentFileGenerator->deleteSeedFiles($dataType);
+        $this->filesGenerator->deleteSeedFiles($dataType);
 
         // After deleting seeds file, we create new seed file in order to rollback
         // the seeded data.
-        return $this->deploymentFileGenerator->generateSeedFileForDeletedData($dataType);
+        return $this->filesGenerator->generateSeedFileForDeletedData($dataType);
     }
 }

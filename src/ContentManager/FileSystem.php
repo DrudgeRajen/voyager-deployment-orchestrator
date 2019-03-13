@@ -22,11 +22,11 @@ class FileSystem
     /**
      * Read Stub File.
      *
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
-    public function readStubFile($file) : string
+    public function readStubFile(string $file) : string
     {
         $buffer = file($file, FILE_IGNORE_NEW_LINES);
 
@@ -69,26 +69,27 @@ class FileSystem
     /**
      * Delete Seed File.
      *
-     * @param $fileName
+     * @param string $fileName
      */
-    public function deleteSeedFiles($fileName)
+    public function deleteSeedFiles(string $fileName)
     {
         $seederFile = $this->getSeederFile($fileName, $this->getSeedFolderPath());
 
         if ($this->filesystem->exists($seederFile)) {
-            $this->filesystem->delete($seederFile);
+            return $this->filesystem->delete($seederFile);
         }
+        return false;
     }
 
     /**
      * Generate Seeder Class Name.
      *
-     * @param $modelSlug
-     * @param $suffix
+     * @param string $modelSlug
+     * @param string $suffix
      *
      * @return string
      */
-    public function generateSeederClassName($modelSlug, $suffix) : string
+    public function generateSeederClassName(string $modelSlug, string $suffix) : string
     {
         $modelString = '';
         $modelName = explode('-', $modelSlug);
@@ -102,12 +103,12 @@ class FileSystem
     /**
      * Add Content to Seeder file.
      *
-     * @param $seederFile
-     * @param $seederContents
+     * @param string $seederFile
+     * @param string $seederContents
      *
      * @return int
      */
-    public function addContentToSeederFile($seederFile, $seederContents) : int
+    public function addContentToSeederFile(string $seederFile, string $seederContents) : int
     {
         return $this->filesystem->put($seederFile, $seederContents);
     }

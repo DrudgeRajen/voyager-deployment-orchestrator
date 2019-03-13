@@ -7,17 +7,28 @@ use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
 
 class BreadUpdatedHandler
 {
-    private $deploymentFileGenerator;
+    /** @var FilesGenerator */
+    private $fileGenerator;
 
-    public function __construct(FilesGenerator $deploymentFileGenerator)
+    /**
+     * BreadUpdatedHandler constructor.
+     *
+     * @param FilesGenerator $filesGenerator
+     */
+    public function __construct(FilesGenerator $filesGenerator)
     {
-        $this->deploymentFileGenerator = $deploymentFileGenerator;
+        $this->fileGenerator = $filesGenerator;
     }
 
+    /**
+     * Bread Updated Handler
+     *
+     * @param BreadChanged $breadUpdated
+     */
     public function handle(BreadChanged $breadUpdated)
     {
         $dataType = $breadUpdated->dataType;
 
-        return $this->deploymentFileGenerator->deleteAndGenerate($dataType);
+        return $this->fileGenerator->deleteAndGenerate($dataType);
     }
 }

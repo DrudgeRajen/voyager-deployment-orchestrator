@@ -3,6 +3,7 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
+use TCG\Voyager\Models\DataType;
 
 class FilesGenerator
 {
@@ -29,20 +30,21 @@ class FilesGenerator
      */
     public function __construct(ContentManager $contentManager, FileSystem $deploymentFileSystem)
     {
-        $this->contentManager = $contentManager;
+        $this->contentManager       = $contentManager;
         $this->deploymentFileSystem = $deploymentFileSystem;
     }
 
     /**
      * Generate Data Type Seed File.
      *
-     * @param $dataType
+     * @param DataType $dataType
      *
      * @return bool
      */
-    public function generateDataTypeSeedFile($dataType) : bool
+    public function generateDataTypeSeedFile(DataType $dataType) : bool
     {
-        $seederClassName = $this->deploymentFileSystem->generateSeederClassName($dataType->slug,
+        $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
+            $dataType->slug,
             self::TYPE_SEEDER_SUFFIX
         );
 
@@ -56,7 +58,8 @@ class FilesGenerator
 
         $dataType->details = json_encode($dataType->details);
 
-        $seedContent = $this->contentManager->populateContentToStubFile($seederClassName,
+        $seedContent = $this->contentManager->populateContentToStubFile(
+            $seederClassName,
             $stub,
             $dataType,
             self::TYPE_SEEDER_SUFFIX
@@ -65,6 +68,7 @@ class FilesGenerator
         // We replace the #dataTypeId with the $dataTypeId variable
         // that will exist in seeder file.
         $seedContent = $this->addDataTypeId($seedContent);
+
         $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
@@ -77,7 +81,7 @@ class FilesGenerator
      *
      * @return bool
      */
-    public function generateDataRowSeedFile($dataType) : bool
+    public function generateDataRowSeedFile(DataType $dataType) : bool
     {
         $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
             $dataType->slug,
@@ -114,23 +118,25 @@ class FilesGenerator
      *
      * @param $dataType
      */
-    public function deleteAndGenerate($dataType)
+    public function deleteAndGenerate(DataType $dataType)
     {
         $this->deleteSeedFiles($dataType);
+
         $this->generateDataTypeSeedFile($dataType);
+
         $this->generateDataRowSeedFile($dataType);
     }
 
     /**
      * Update Orchestra Seeder Run Method.
      *
-     * @param $className
+     * @param string $className
      *
      * @return bool
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function updateOrchestraSeeder($className)
+    public function updateOrchestraSeeder(string $className) : bool
     {
         $databaseSeederPath = $this->deploymentFileSystem->getSeedFolderPath();
 
@@ -139,6 +145,7 @@ class FilesGenerator
         $file = $this->deploymentFileSystem->getSeederFile($seederClassname, $databaseSeederPath);
 
         $content = $this->deploymentFileSystem->getFileContent($file);
+
         $content = $this->contentManager->updateDeploymentOrchestraSeederContent($className, $content);
 
         return $this->deploymentFileSystem->addContentToSeederFile($file, $content) !== false;
@@ -147,9 +154,9 @@ class FilesGenerator
     /**
      * Delete Seed Files.
      *
-     * @param $dataType
+     * @param DataType $dataType
      */
-    public function deleteSeedFiles($dataType)
+    public function deleteSeedFiles(DataType $dataType)
     {
         $dataTypSeederClass = $this->deploymentFileSystem->generateSeederClassName($dataType->slug,
             self::TYPE_SEEDER_SUFFIX
@@ -160,19 +167,20 @@ class FilesGenerator
         );
 
         $this->deploymentFileSystem->deleteSeedFiles($dataTypSeederClass);
+
         $this->deploymentFileSystem->deleteSeedFiles($dataRowSeederClass);
     }
 
     /**
      * Generate Seed File For Deleted Data.
      *
-     * @param $dataType
+     * @param DataType $dataType
      *
      * @return bool
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function generateSeedFileForDeletedData($dataType)
+    public function generateSeedFileForDeletedData(DataType $dataType) : bool
     {
         $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
             $dataType->slug,
