@@ -48,7 +48,7 @@ class FileGenerator
             self::TYPE_SEEDER_SUFFIX
         );
 
-        $stub = $this->fileSystem->readStubFile(
+        $stub = $this->fileSystem->getFileContent(
             $this->fileSystem->getStubPath() . '../stubs/data_seed.stub'
         );
 
@@ -88,7 +88,7 @@ class FileGenerator
             self::ROW_SEEDER_SUFFIX
         );
 
-        $stub = $this->fileSystem->readStubFile(
+        $stub = $this->fileSystem->getFileContent(
             $this->fileSystem->getStubPath() . '../stubs/row_seed.stub'
         );
 
@@ -185,7 +185,7 @@ class FileGenerator
             self::DELETED_SEEDER_SUFFIX
         );
 
-        $stub = $this->fileSystem->readStubFile(
+        $stub = $this->fileSystem->getFileContent(
             $this->fileSystem->getStubPath() . '../stubs/delete_seed.stub'
         );
 

@@ -20,20 +20,6 @@ class FileSystem
     }
 
     /**
-     * Read Stub File.
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    public function readStubFile(string $file) : string
-    {
-        $buffer = file($file, FILE_IGNORE_NEW_LINES);
-
-        return implode(PHP_EOL, $buffer);
-    }
-
-    /**
      * Get seeder file.
      *
      * @param string $name
