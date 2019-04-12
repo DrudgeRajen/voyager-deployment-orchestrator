@@ -16,3 +16,4 @@ return PhpCsFixer\Config::create()
         'align_equals' => true
     ))
     ->setFinder($finder);
+
