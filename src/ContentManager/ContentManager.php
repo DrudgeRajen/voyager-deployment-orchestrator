@@ -76,13 +76,13 @@ class ContentManager
         $stub = $this->replaceString('{{class}}', $className, $stub);
 
         switch ($suffix) {
-            case FilesGenerator::TYPE_SEEDER_SUFFIX:
+            case FileGenerator::TYPE_SEEDER_SUFFIX:
                 $stub = $this->populateDataTypeSeederContent($stub, $dataType);
                 break;
-            case FilesGenerator::ROW_SEEDER_SUFFIX:
+            case FileGenerator::ROW_SEEDER_SUFFIX:
                 $stub = $this->populateDataRowSeederContent($stub, $dataType);
                 break;
-            case FilesGenerator::DELETED_SEEDER_SUFFIX:
+            case FileGenerator::DELETED_SEEDER_SUFFIX:
                 $stub = $this->populateBreadDeletedSeederContent($stub, $dataType);
                 break;
         }

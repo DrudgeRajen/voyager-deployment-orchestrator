@@ -5,7 +5,7 @@ namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
 use TCG\Voyager\Models\DataType;
 
-class FilesGenerator
+class FileGenerator
 {
     /** @var string */
     const TYPE_SEEDER_SUFFIX = 'BreadTypeAdded';

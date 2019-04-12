@@ -4,21 +4,21 @@ namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Events\BreadChanged;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadDeletedHandler
 {
-    /** @var FilesGenerator */
-    private $filesGenerator;
+    /** @var FileGenerator */
+    private $fileGenerator;
 
     /**
      * VoyagerDeleted constructor.
      *
-     * @param FilesGenerator $filesGenerator
+     * @param FilesGenerator $fileGenerator
      */
-    public function __construct(FilesGenerator $filesGenerator)
+    public function __construct(FileGenerator $fileGenerator)
     {
-        $this->filesGenerator = $filesGenerator;
+        $this->fileGenerator = $fileGenerator;
     }
 
     /**
@@ -46,10 +46,10 @@ class BreadDeletedHandler
         }
 
         //Finally, We can delete seed files.
-        $this->filesGenerator->deleteSeedFiles($dataType);
+        $this->fileGenerator->deleteSeedFiles($dataType);
 
         // After deleting seeds file, we create new seed file in order to rollback
         // the seeded data.
-        return $this->filesGenerator->generateSeedFileForDeletedData($dataType);
+        return $this->fileGenerator->generateSeedFileForDeletedData($dataType);
     }
 }

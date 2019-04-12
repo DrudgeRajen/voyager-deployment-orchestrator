@@ -55,6 +55,7 @@ class VoyagerDeploymentOrchestrator
         ) {
             return;
         }
+
         try {
             $handler = $this->getHandle($breadChanged->changeType);
 
@@ -64,8 +65,8 @@ class VoyagerDeploymentOrchestrator
             // Run composer dump-auto
             $this->composer->dumpAutoloads();
         } catch (Exception $e) {
-            throw new OrchestratorHandlerNotFoundException($e->getMessage());
-            app('log')->debug($e->getStackTrace());
+//            throw new OrchestratorHandlerNotFoundException($e->getMessage());
+            app('log')->debug($e);
         }
     }
 

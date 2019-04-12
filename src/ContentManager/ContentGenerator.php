@@ -189,15 +189,15 @@ TXT;
      */
     public function generateOrchestraSeederContent($className, $content)
     {
-        if (strpos($className, FilesGenerator::DELETED_SEEDER_SUFFIX) !== false) {
+        if (strpos($className, FileGenerator::DELETED_SEEDER_SUFFIX) !== false) {
             $toBeDeletedClassName = strstr(
                 $className,
-                FilesGenerator::DELETED_SEEDER_SUFFIX,
+                FileGenerator::DELETED_SEEDER_SUFFIX,
                 true
             );
-            $breadTypeAddedClass = $toBeDeletedClassName . FilesGenerator::TYPE_SEEDER_SUFFIX;
+            $breadTypeAddedClass = $toBeDeletedClassName . FileGenerator::TYPE_SEEDER_SUFFIX;
 
-            $breadRowAddedClass = $toBeDeletedClassName . FilesGenerator::ROW_SEEDER_SUFFIX;
+            $breadRowAddedClass = $toBeDeletedClassName . FileGenerator::ROW_SEEDER_SUFFIX;
 
             $content = str_replace("\$this->seed({$breadTypeAddedClass}::class);", '', $content);
             $content = str_replace("\$this->seed({$breadRowAddedClass}::class);", '', $content);

@@ -3,21 +3,21 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Events\BreadChanged;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadUpdatedHandler
 {
-    /** @var FilesGenerator */
+    /** @var FileGenerator */
     private $fileGenerator;
 
     /**
      * BreadUpdatedHandler constructor.
      *
-     * @param FilesGenerator $filesGenerator
+     * @param FilesGenerator $fileGenerator
      */
-    public function __construct(FilesGenerator $filesGenerator)
+    public function __construct(FileGenerator $fileGenerator)
     {
-        $this->fileGenerator = $filesGenerator;
+        $this->fileGenerator = $fileGenerator;
     }
 
     /**
