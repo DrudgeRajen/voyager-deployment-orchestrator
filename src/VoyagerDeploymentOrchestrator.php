@@ -35,6 +35,12 @@ class VoyagerDeploymentOrchestrator
     /** @var Application */
     private $app;
 
+    /**
+     * VoyagerDeploymentOrchestrator constructor.
+     *
+     * @param Composer $composer
+     * @param Application $application
+     */
     public function __construct(Composer $composer, Application $application)
     {
         $this->composer = $composer;
@@ -65,8 +71,7 @@ class VoyagerDeploymentOrchestrator
             // Run composer dump-auto
             $this->composer->dumpAutoloads();
         } catch (Exception $e) {
-//            throw new OrchestratorHandlerNotFoundException($e->getMessage());
-            app('log')->debug($e);
+            throw new OrchestratorHandlerNotFoundException($e->getMessage());
         }
     }
 

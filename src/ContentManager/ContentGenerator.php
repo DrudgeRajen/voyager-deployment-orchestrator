@@ -117,6 +117,7 @@ TXT;
      * Get Delete Statement.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function getDeleteStatement($dataType): string
@@ -133,6 +134,7 @@ TXT;
      * Generate Menu Delete Statements.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function generateMenuDeleteStatements($dataType) : string
@@ -167,6 +169,7 @@ TXT;
      * Get Menu Insert Statements.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function getMenuInsertStatements($dataType) : string

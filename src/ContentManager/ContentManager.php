@@ -103,8 +103,11 @@ class ContentManager
     }
 
     /**
+     * Populate Data Type Seeder Content.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populateDataTypeSeederContent(string $stub, DataType $dataType)
@@ -132,8 +135,11 @@ class ContentManager
     }
 
     /**
+     * Populate Data Row Seeder Content.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populateDataRowSeederContent(string $stub, DataType $dataType)
@@ -155,8 +161,11 @@ class ContentManager
     }
 
     /**
+     * Populate Bread Deleted Seeder Content.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populateBreadDeletedSeederContent(string $stub, DataType $dataType)
@@ -183,8 +192,11 @@ class ContentManager
     }
 
     /**
+     * Populate Permission Statements.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populatePermissionStatements(string $stub, DataType $dataType)
@@ -205,8 +217,11 @@ class ContentManager
     }
 
     /**
+     * Populate Delete Statements.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populateDeleteStatements(string $stub, DataType $dataType)
@@ -218,8 +233,11 @@ class ContentManager
     }
 
     /**
+     * Populate Menu Statements.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return mixed|string
      */
     private function populateMenuStatements(string $stub, DataType $dataType)
@@ -231,8 +249,11 @@ class ContentManager
     }
 
     /**
+     * Populate Translation Statements.
+     *
      * @param string $stub
      * @param DataType $dataType
+     *
      * @return array
      */
     private function populateTranslationStatements(string $stub, DataType $dataType)
@@ -269,9 +290,12 @@ class ContentManager
     }
 
     /**
+     * Populate Insert Statements.
+     *
      * @param string $stub
      * @param string $tableName
      * @param $dataTypeArray
+     *
      * @return mixed|string
      */
     private function populateInsertStatements(
@@ -291,9 +315,12 @@ class ContentManager
     }
 
     /**
+     * Replace String.
+     *
      * @param $search
      * @param $replace
      * @param $stub
+     *
      * @return mixed
      */
     private function replaceString($search, $replace, $stub)
