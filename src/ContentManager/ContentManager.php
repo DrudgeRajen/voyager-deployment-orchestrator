@@ -75,19 +75,16 @@ class ContentManager
     {
         $stub = $this->replaceString('{{class}}', $className, $stub);
 
-        $inserts = '';
-
         switch ($suffix) {
             case FilesGenerator::TYPE_SEEDER_SUFFIX:
-                $stub = $this->populateDataTypeSeederContent($stub, $dataType, $inserts);
+                $stub = $this->populateDataTypeSeederContent($stub, $dataType);
                 break;
             case FilesGenerator::ROW_SEEDER_SUFFIX:
-                $stub = $this->populateDataRowSeederContent($stub, $dataType, $inserts);
+                $stub = $this->populateDataRowSeederContent($stub, $dataType);
                 break;
             case FilesGenerator::DELETED_SEEDER_SUFFIX:
                 $stub = $this->populateBreadDeletedSeederContent($stub, $dataType);
                 break;
-
         }
 
         return $stub;
@@ -109,17 +106,16 @@ class ContentManager
     /**
      * @param string $stub
      * @param DataType $dataType
-     * @param string $inserts
      * @return mixed|string
      */
-    private function populateDataTypeSeederContent(string $stub, DataType $dataType, string $inserts)
+    private function populateDataTypeSeederContent(string $stub, DataType $dataType)
     {
         $tableName = $dataType->getTable();
         $stub      = $this->populateDeleteStatements($stub, $dataType);
         $stub      = $this->populatePermissionStatements($stub, $dataType);
         $stub      = $this->populateMenuStatements($stub, $dataType);
 
-        list($dataType, $stub) = $this->populateTranslationStatements($stub, $dataType, $inserts);
+        list($dataType, $stub) = $this->populateTranslationStatements($stub, $dataType);
 
         $dataTypeArray = $dataType->toArray();
 
@@ -130,7 +126,6 @@ class ContentManager
         }
 
         return $this->populateInsertStatements($stub,
-            $inserts,
             $tableName,
             $dataTypeArray,
             '{{insert_statements}}'
@@ -140,10 +135,9 @@ class ContentManager
     /**
      * @param string $stub
      * @param DataType $dataType
-     * @param string $inserts
      * @return mixed|string
      */
-    private function populateDataRowSeederContent(string $stub, DataType $dataType, string $inserts)
+    private function populateDataRowSeederContent(string $stub, DataType $dataType)
     {
         $rows      = $dataType->rows;
         $dataArray = $this->repackContentData($rows->toArray());
@@ -155,7 +149,6 @@ class ContentManager
         );
 
         return $this->populateInsertStatements($stub,
-            $inserts,
             $tableName,
             $dataArray,
             '{{insert_statements}}'
@@ -243,7 +236,7 @@ class ContentManager
      * @param DataType $dataType
      * @return array
      */
-    private function populateTranslationStatements(string $stub, DataType $dataType, string $inserts)
+    private function populateTranslationStatements(string $stub, DataType $dataType)
     {
         if (!count($dataType->translations)) {
             $stub = $this->replaceString('{{translation_insert_statements}}',
@@ -268,7 +261,6 @@ class ContentManager
         );
 
         $stub = $this->populateInsertStatements($stub,
-            $inserts,
             $tableName,
             $translations,
             '{{translation_insert_statements}}'
@@ -279,19 +271,18 @@ class ContentManager
 
     /**
      * @param string $stub
-     * @param string $inserts
      * @param string $tableName
      * @param $dataTypeArray
      * @return mixed|string
      */
     private function populateInsertStatements(
         string $stub,
-        string $inserts,
         string $tableName,
         array $dataTypeArray,
         $insertStatementString
     )
     {
+        $inserts = '';
         $inserts .= sprintf(
             "\DB::table('%s')->insert(%s);",
             $tableName,
