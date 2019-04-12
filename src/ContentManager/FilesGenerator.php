@@ -20,7 +20,7 @@ class FilesGenerator
     private $contentManager;
 
     /** @var FileSystem */
-    private $deploymentFileSystem;
+    private $fileSystem;
 
     /**
      * FilesGenerator constructor.
@@ -28,10 +28,10 @@ class FilesGenerator
      * @param ContentManager $contentManager
      * @param FileSystem $deploymentFileSystem
      */
-    public function __construct(ContentManager $contentManager, FileSystem $deploymentFileSystem)
+    public function __construct(ContentManager $contentManager, FileSystem $fileSystem)
     {
-        $this->contentManager       = $contentManager;
-        $this->deploymentFileSystem = $deploymentFileSystem;
+        $this->contentManager = $contentManager;
+        $this->fileSystem     = $fileSystem;
     }
 
     /**
@@ -43,18 +43,18 @@ class FilesGenerator
      */
     public function generateDataTypeSeedFile(DataType $dataType) : bool
     {
-        $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
+        $seederClassName = $this->fileSystem->generateSeederClassName(
             $dataType->slug,
             self::TYPE_SEEDER_SUFFIX
         );
 
-        $stub = $this->deploymentFileSystem->readStubFile(
-            $this->deploymentFileSystem->getStubPath() . '../stubs/data_seed.stub'
+        $stub = $this->fileSystem->readStubFile(
+            $this->fileSystem->getStubPath() . '../stubs/data_seed.stub'
         );
 
-        $seedFolderPath = $this->deploymentFileSystem->getSeedFolderPath();
+        $seedFolderPath = $this->fileSystem->getSeedFolderPath();
 
-        $seederFile = $this->deploymentFileSystem->getSeederFile($seederClassName, $seedFolderPath);
+        $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
         $dataType->details = json_encode($dataType->details);
 
@@ -69,7 +69,7 @@ class FilesGenerator
         // that will exist in seeder file.
         $seedContent = $this->addDataTypeId($seedContent);
 
-        $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
+        $this->fileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
     }
@@ -83,20 +83,18 @@ class FilesGenerator
      */
     public function generateDataRowSeedFile(DataType $dataType) : bool
     {
-        $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
+        $seederClassName = $this->fileSystem->generateSeederClassName(
             $dataType->slug,
             self::ROW_SEEDER_SUFFIX
         );
 
-        $stub = $this->deploymentFileSystem->readStubFile(
-            $this->deploymentFileSystem->getStubPath() . '../stubs/row_seed.stub'
+        $stub = $this->fileSystem->readStubFile(
+            $this->fileSystem->getStubPath() . '../stubs/row_seed.stub'
         );
 
-        $stub = str_replace('{{class}}', $seederClassName, $stub);
+        $seedFolderPath = $this->fileSystem->getSeedFolderPath();
 
-        $seedFolderPath = $this->deploymentFileSystem->getSeedFolderPath();
-
-        $seederFile = $this->deploymentFileSystem->getSeederFile($seederClassName, $seedFolderPath);
+        $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
         $seedContent = $this->contentManager->populateContentToStubFile($seederClassName,
             $stub,
@@ -108,7 +106,7 @@ class FilesGenerator
         // that will exist in seeder file.
         $seedContent = $this->addDataTypeId($seedContent);
 
-        $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
+        $this->fileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
     }
@@ -138,17 +136,17 @@ class FilesGenerator
      */
     public function updateOrchestraSeeder(string $className) : bool
     {
-        $databaseSeederPath = $this->deploymentFileSystem->getSeedFolderPath();
+        $databaseSeederPath = $this->fileSystem->getSeedFolderPath();
 
         $seederClassname = 'VoyagerDeploymentOrchestratorSeeder';
 
-        $file = $this->deploymentFileSystem->getSeederFile($seederClassname, $databaseSeederPath);
+        $file = $this->fileSystem->getSeederFile($seederClassname, $databaseSeederPath);
 
-        $content = $this->deploymentFileSystem->getFileContent($file);
+        $content = $this->fileSystem->getFileContent($file);
 
         $content = $this->contentManager->updateDeploymentOrchestraSeederContent($className, $content);
 
-        return $this->deploymentFileSystem->addContentToSeederFile($file, $content) !== false;
+        return $this->fileSystem->addContentToSeederFile($file, $content) !== false;
     }
 
     /**
@@ -158,17 +156,17 @@ class FilesGenerator
      */
     public function deleteSeedFiles(DataType $dataType)
     {
-        $dataTypSeederClass = $this->deploymentFileSystem->generateSeederClassName($dataType->slug,
+        $dataTypSeederClass = $this->fileSystem->generateSeederClassName($dataType->slug,
             self::TYPE_SEEDER_SUFFIX
         );
 
-        $dataRowSeederClass = $this->deploymentFileSystem->generateSeederClassName($dataType->slug,
+        $dataRowSeederClass = $this->fileSystem->generateSeederClassName($dataType->slug,
             self::ROW_SEEDER_SUFFIX
         );
 
-        $this->deploymentFileSystem->deleteSeedFiles($dataTypSeederClass);
+        $this->fileSystem->deleteSeedFiles($dataTypSeederClass);
 
-        $this->deploymentFileSystem->deleteSeedFiles($dataRowSeederClass);
+        $this->fileSystem->deleteSeedFiles($dataRowSeederClass);
     }
 
     /**
@@ -182,18 +180,18 @@ class FilesGenerator
      */
     public function generateSeedFileForDeletedData(DataType $dataType) : bool
     {
-        $seederClassName = $this->deploymentFileSystem->generateSeederClassName(
+        $seederClassName = $this->fileSystem->generateSeederClassName(
             $dataType->slug,
             self::DELETED_SEEDER_SUFFIX
         );
 
-        $stub = $this->deploymentFileSystem->readStubFile(
-            $this->deploymentFileSystem->getStubPath() . '../stubs/delete_seed.stub'
+        $stub = $this->fileSystem->readStubFile(
+            $this->fileSystem->getStubPath() . '../stubs/delete_seed.stub'
         );
 
-        $seedFolderPath = $this->deploymentFileSystem->getSeedFolderPath();
+        $seedFolderPath = $this->fileSystem->getSeedFolderPath();
 
-        $seederFile = $this->deploymentFileSystem->getSeederFile($seederClassName, $seedFolderPath);
+        $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
         $seedContent = $this->contentManager->populateContentToStubFile($seederClassName,
             $stub,
@@ -201,7 +199,7 @@ class FilesGenerator
             self::DELETED_SEEDER_SUFFIX
         );
 
-        $this->deploymentFileSystem->addContentToSeederFile($seederFile, $seedContent);
+        $this->fileSystem->addContentToSeederFile($seederFile, $seedContent);
 
         return $this->updateOrchestraSeeder($seederClassName);
     }

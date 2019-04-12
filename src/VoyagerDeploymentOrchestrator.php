@@ -65,6 +65,7 @@ class VoyagerDeploymentOrchestrator
             $this->composer->dumpAutoloads();
         } catch (Exception $e) {
             throw new OrchestratorHandlerNotFoundException($e->getMessage());
+            app('log')->debug($e->getStackTrace());
         }
     }
 

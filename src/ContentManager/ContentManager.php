@@ -26,10 +26,10 @@ class ContentManager
      *
      * @return array
      */
-    public function repackContentData($data) : array
+    public function repackContentData($data): array
     {
         $dataArray = [];
-        if (! empty($data)) {
+        if (!empty($data)) {
             foreach ($data as $row) {
                 $rowArray = [];
                 foreach ($row as $columnName => $columnValue) {
@@ -71,118 +71,21 @@ class ContentManager
         string $stub,
         DataType $dataType,
         string $suffix
-    ) {
-        $stub = str_replace('{{class}}', $className, $stub);
+    )
+    {
+        $stub = $this->replaceString('{{class}}', $className, $stub);
 
         $inserts = '';
 
         switch ($suffix) {
             case FilesGenerator::TYPE_SEEDER_SUFFIX:
-                $tableName = $dataType->getTable();
-
-                $stub = str_replace('{{delete_statements}}',
-                    $this->contentGenerator->getDeleteStatement($dataType),
-                    $stub
-                );
-                if ($dataType->generate_permissions) {
-                    $stub = str_replace('{{permission_insert_statements}}',
-                        $this->contentGenerator->getPermissionStatement($dataType),
-                        $stub
-                    );
-                } else {
-                    $stub = str_replace('{{permission_insert_statements}}',
-                        '',
-                        $stub
-                    );
-                }
-                $stub = str_replace('{{menu_insert_statements}}',
-                    $this->contentGenerator->getMenuInsertStatements($dataType),
-                    $stub
-                );
-                $dataTypeArray = $dataType->toArray();
-                unset($dataTypeArray['id']);
-
-                if (isset($dataTypeArray['translations'])) {
-                    $translations = $this->repackContentData($dataTypeArray['translations']);
-                    $stub = str_replace('{{datatype_slug_statements}}',
-                        $this->contentGenerator->getDataTypeSlugStatement($dataType),
-                        $stub
-                    );
-
-                    $translationInsertStatement = '';
-
-                    $translationInsertStatement .= sprintf(
-                        "\DB::table('%s')->insert(%s);",
-                        'translations',
-                        $this->contentGenerator->formatContent($translations)
-                    );
-
-                    $stub = str_replace('{{translation_insert_statements}}', $translationInsertStatement, $stub);
-                    unset($dataTypeArray['translations']);
-                } else {
-                    $stub = str_replace('{{translation_insert_statements}}',
-                        '',
-                        $stub
-                    );
-                    $stub = str_replace('{{datatype_slug_statements}}',
-                        '',
-                        $stub
-                    );
-                }
-
-                $inserts .= sprintf(
-                    "\DB::table('%s')->insert(%s);",
-                    $tableName,
-                    $this->contentGenerator->formatContent($dataTypeArray)
-                );
-
-                $stub = str_replace('{{insert_statements}}', $inserts, $stub);
-
+                $stub = $this->populateDataTypeSeederContent($stub, $dataType, $inserts);
                 break;
             case FilesGenerator::ROW_SEEDER_SUFFIX:
-                $rows = $dataType->rows;
-
-                $dataArray = $this->repackContentData($rows->toArray());
-
-                $tableName = $rows->last()->getTable();
-
-                $stub = str_replace('{{datatype_slug_statement}}',
-                    $this->contentGenerator->getDataTypeSlugStatement($dataType),
-                    $stub
-                );
-
-                $inserts .= sprintf(
-                    "\DB::table('%s')->insert(%s);",
-                    $tableName,
-                    $this->contentGenerator->formatContent($dataArray)
-                );
-
-                $stub = str_replace('{{insert_statements}}', $inserts, $stub);
+                $stub = $this->populateDataRowSeederContent($stub, $dataType, $inserts);
                 break;
-
             case FilesGenerator::DELETED_SEEDER_SUFFIX:
-                $stub = str_replace('{{delete_statements}}',
-                    $this->contentGenerator->getDeleteStatement($dataType),
-                    $stub
-                );
-
-                if ($dataType->generate_permissions) {
-                    $stub = str_replace('{{permission_delete_statements}}',
-                        $this->contentGenerator->getPermissionStatement($dataType, 'delete'),
-                        $stub
-                    );
-                } else {
-                    $stub = str_replace('{{permission_delete_statements}}',
-                        '',
-                        $stub
-                    );
-                }
-
-                $stub = str_replace(
-                    '{{menu_delete_statements}}',
-                    $this->contentGenerator->generateMenuDeleteStatements($dataType),
-                    $stub
-                );
+                $stub = $this->populateBreadDeletedSeederContent($stub, $dataType);
                 break;
 
         }
@@ -201,5 +104,211 @@ class ContentManager
     public function updateDeploymentOrchestraSeederContent($className, $content)
     {
         return $this->contentGenerator->generateOrchestraSeederContent($className, $content);
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @param string $inserts
+     * @return mixed|string
+     */
+    private function populateDataTypeSeederContent(string $stub, DataType $dataType, string $inserts)
+    {
+        $tableName = $dataType->getTable();
+        $stub      = $this->populateDeleteStatements($stub, $dataType);
+        $stub      = $this->populatePermissionStatements($stub, $dataType);
+        $stub      = $this->populateMenuStatements($stub, $dataType);
+
+        list($dataType, $stub) = $this->populateTranslationStatements($stub, $dataType, $inserts);
+
+        $dataTypeArray = $dataType->toArray();
+
+        //Here, we cannot do $dataType->unsetRelations('translations)
+        // because voyager first fire events and then save the translations.
+        if (isset($dataTypeArray['translations'])) {
+            unset($dataTypeArray['translations']);
+        }
+
+        return $this->populateInsertStatements($stub,
+            $inserts,
+            $tableName,
+            $dataTypeArray,
+            '{{insert_statements}}'
+        );
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @param string $inserts
+     * @return mixed|string
+     */
+    private function populateDataRowSeederContent(string $stub, DataType $dataType, string $inserts)
+    {
+        $rows      = $dataType->rows;
+        $dataArray = $this->repackContentData($rows->toArray());
+        $tableName = $rows->last()->getTable();
+
+        $stub = str_replace('{{datatype_slug_statement}}',
+            $this->contentGenerator->getDataTypeSlugStatement($dataType),
+            $stub
+        );
+
+        return $this->populateInsertStatements($stub,
+            $inserts,
+            $tableName,
+            $dataArray,
+            '{{insert_statements}}'
+        );
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @return mixed|string
+     */
+    private function populateBreadDeletedSeederContent(string $stub, DataType $dataType)
+    {
+        $stub = $this->populateDeleteStatements($stub, $dataType);
+
+        if ($dataType->generate_permissions) {
+            $stub = $this->replaceString('{{permission_delete_statements}}',
+                $this->contentGenerator->getPermissionStatement($dataType, 'delete'),
+                $stub
+            );
+        } else {
+            $stub = $this->replaceString('{{permission_delete_statements}}',
+                '',
+                $stub
+            );
+        }
+
+        return $this->replaceString(
+            '{{menu_delete_statements}}',
+            $this->contentGenerator->generateMenuDeleteStatements($dataType),
+            $stub
+        );
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @return mixed|string
+     */
+    private function populatePermissionStatements(string $stub, DataType $dataType)
+    {
+        if ($dataType->generate_permissions) {
+            $stub = $this->replaceString('{{permission_insert_statements}}',
+                $this->contentGenerator->getPermissionStatement($dataType),
+                $stub
+            );
+        } else {
+            $stub = $this->replaceString('{{permission_insert_statements}}',
+                '',
+                $stub
+            );
+        }
+
+        return $stub;
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @return mixed|string
+     */
+    private function populateDeleteStatements(string $stub, DataType $dataType)
+    {
+        return $this->replaceString('{{delete_statements}}',
+            $this->contentGenerator->getDeleteStatement($dataType),
+            $stub
+        );
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @return mixed|string
+     */
+    private function populateMenuStatements(string $stub, DataType $dataType)
+    {
+        return $this->replaceString('{{menu_insert_statements}}',
+            $this->contentGenerator->getMenuInsertStatements($dataType),
+            $stub
+        );
+    }
+
+    /**
+     * @param string $stub
+     * @param DataType $dataType
+     * @return array
+     */
+    private function populateTranslationStatements(string $stub, DataType $dataType, string $inserts)
+    {
+        if (!count($dataType->translations)) {
+            $stub = $this->replaceString('{{translation_insert_statements}}',
+                '',
+                $stub
+            );
+
+            $stub = $this->replaceString('{{datatype_slug_statements}}',
+                '',
+                $stub
+            );
+
+            return [$dataType, $stub];
+        }
+
+        $tableName    = $dataType->translations->last()->getTable();
+        $translations = $this->repackContentData($dataType->translations->toArray());
+
+        $stub = $this->replaceString('{{datatype_slug_statements}}',
+            $this->contentGenerator->getDataTypeSlugStatement($dataType),
+            $stub
+        );
+
+        $stub = $this->populateInsertStatements($stub,
+            $inserts,
+            $tableName,
+            $translations,
+            '{{translation_insert_statements}}'
+        );
+
+        return [$dataType, $stub];
+    }
+
+    /**
+     * @param string $stub
+     * @param string $inserts
+     * @param string $tableName
+     * @param $dataTypeArray
+     * @return mixed|string
+     */
+    private function populateInsertStatements(
+        string $stub,
+        string $inserts,
+        string $tableName,
+        array $dataTypeArray,
+        $insertStatementString
+    )
+    {
+        $inserts .= sprintf(
+            "\DB::table('%s')->insert(%s);",
+            $tableName,
+            $this->contentGenerator->formatContent($dataTypeArray)
+        );
+
+        return $this->replaceString($insertStatementString, $inserts, $stub);
+    }
+
+    /**
+     * @param $search
+     * @param $replace
+     * @param $stub
+     * @return mixed
+     */
+    private function replaceString($search, $replace, $stub)
+    {
+        return str_replace($search, $replace, $stub);
     }
 }

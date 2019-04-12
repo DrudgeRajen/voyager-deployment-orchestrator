@@ -52,7 +52,7 @@ TXT;
 $menuItem = MenuItem::where('route', 'voyager.%s.index');
 
         if ($menuItem->exists()) {
-        $menuItem->delete();
+            $menuItem->delete();
         }
 TXT;
 
