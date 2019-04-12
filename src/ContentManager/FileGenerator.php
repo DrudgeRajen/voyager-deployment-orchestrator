@@ -2,8 +2,8 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
 use TCG\Voyager\Models\DataType;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
 
 class FileGenerator
 {

@@ -21,7 +21,7 @@ class BreadAddedHandler
     }
 
     /**
-     * Bread Added Handler
+     * Bread Added Handler.
      *
      * @param BreadChanged $breadAdded
      *

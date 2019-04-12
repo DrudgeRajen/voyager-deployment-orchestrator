@@ -79,7 +79,7 @@ TXT;
         // replace array() with []
         $content = str_replace('array (', '[', $content);
         $content = str_replace(')', ']', $content);
-        $lines = explode("\n", $content);
+        $lines   = explode("\n", $content);
 
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);

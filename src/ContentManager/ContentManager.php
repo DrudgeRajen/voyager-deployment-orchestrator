@@ -29,7 +29,7 @@ class ContentManager
     public function repackContentData($data): array
     {
         $dataArray = [];
-        if (!empty($data)) {
+        if (! empty($data)) {
             foreach ($data as $row) {
                 $rowArray = [];
                 foreach ($row as $columnName => $columnValue) {
@@ -71,8 +71,7 @@ class ContentManager
         string $stub,
         DataType $dataType,
         string $suffix
-    )
-    {
+    ) {
         $stub = $this->replaceString('{{class}}', $className, $stub);
 
         switch ($suffix) {
@@ -238,7 +237,7 @@ class ContentManager
      */
     private function populateTranslationStatements(string $stub, DataType $dataType)
     {
-        if (!count($dataType->translations)) {
+        if (! count($dataType->translations)) {
             $stub = $this->replaceString('{{translation_insert_statements}}',
                 '',
                 $stub
@@ -280,8 +279,7 @@ class ContentManager
         string $tableName,
         array $dataTypeArray,
         $insertStatementString
-    )
-    {
+    ) {
         $inserts = '';
         $inserts .= sprintf(
             "\DB::table('%s')->insert(%s);",

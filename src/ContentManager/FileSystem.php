@@ -78,6 +78,7 @@ class FileSystem
         if ($this->filesystem->exists($seederFile)) {
             return $this->filesystem->delete($seederFile);
         }
+
         return false;
     }
 
@@ -92,6 +93,7 @@ class FileSystem
     public function generateSeederClassName(string $modelSlug, string $suffix) : string
     {
         $modelString = '';
+
         $modelName = explode('-', $modelSlug);
         foreach ($modelName as $modelNameExploded) {
             $modelString .= ucfirst($modelNameExploded);

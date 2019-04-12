@@ -22,7 +22,7 @@ class BreadDeletedHandler
     }
 
     /**
-     * Bread Deleted Handler
+     * Bread Deleted Handler.
      *
      * @param BreadChanged $breadDataDeleted
      *

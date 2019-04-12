@@ -38,7 +38,7 @@ class VoyagerDeploymentOrchestrator
     public function __construct(Composer $composer, Application $application)
     {
         $this->composer = $composer;
-        $this->app = $application;
+        $this->app      = $application;
     }
 
     /**
