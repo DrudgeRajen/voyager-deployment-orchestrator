@@ -12,6 +12,7 @@ return PhpCsFixer\Config::create()
         '@PSR2' => true,
         'lowercase_constants' => false,
         'method_argument_space' => false,
-        'concat_space' => ['spacing' => "one"]
+        'concat_space' => ['spacing' => "one"],
+        'align_equals' => true
     ))
     ->setFinder($finder);
