@@ -77,14 +77,12 @@ TXT;
         $tabCount = 4;
 
         // replace array() with []
-        $content = str_replace('array (', '[', $content);
-        $content = str_replace(')', ']', $content);
         $lines   = explode("\n", $content);
 
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);
             // Check for closing bracket
-            if (strpos($lines[$i], ']') !== false) {
+            if (strpos($lines[$i], ')') !== false) {
                 $tabCount--;
             }
 
@@ -104,7 +102,7 @@ TXT;
                 }
             }
             // check for opening bracket
-            if (strpos($lines[$i], '[') !== false) {
+            if (strpos($lines[$i], '(') !== false) {
                 $tabCount++;
             }
         }
