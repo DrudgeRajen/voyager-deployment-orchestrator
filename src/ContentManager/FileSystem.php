@@ -53,7 +53,7 @@ class FileSystem
     }
 
     /**
-     * Delete Seed File
+     * Delete Seed File.
      *
      * @param string $fileName
      *
