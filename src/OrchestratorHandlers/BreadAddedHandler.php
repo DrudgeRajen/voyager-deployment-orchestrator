@@ -3,25 +3,38 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Events\BreadChanged;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadAddedHandler
 {
-    private $deploymentFilesGenerator;
+    /** @var FileGenerator */
+    private $fileGenerator;
 
-    public function __construct(FilesGenerator $deploymentFilesGenerator)
+    /**
+     * BreadAddedHandler constructor.
+     *
+     * @param FilesGenerator $fileGenerator
+     */
+    public function __construct(FileGenerator $fileGenerator)
     {
-        $this->deploymentFilesGenerator = $deploymentFilesGenerator;
+        $this->filesGenerator = $fileGenerator;
     }
 
+    /**
+     * Bread Added Handler.
+     *
+     * @param BreadChanged $breadAdded
+     *
+     * @return bool
+     */
     public function handle(BreadChanged $breadAdded)
     {
         $dataType = $breadAdded->dataType;
 
         //Generate Data Type Seeder File.
-        $this->deploymentFilesGenerator->generateDataTypeSeedFile($dataType);
+        $this->filesGenerator->generateDataTypeSeedFile($dataType);
 
         //Generate Data Row Seeder File.
-        return $this->deploymentFilesGenerator->generateDataRowSeedFile($dataType);
+        return $this->filesGenerator->generateDataRowSeedFile($dataType);
     }
 }

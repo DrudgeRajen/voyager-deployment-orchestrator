@@ -20,20 +20,6 @@ class FileSystem
     }
 
     /**
-     * Read Stub File.
-     *
-     * @param $file
-     *
-     * @return string
-     */
-    public function readStubFile($file) : string
-    {
-        $buffer = file($file, FILE_IGNORE_NEW_LINES);
-
-        return implode(PHP_EOL, $buffer);
-    }
-
-    /**
      * Get seeder file.
      *
      * @param string $name
@@ -69,28 +55,33 @@ class FileSystem
     /**
      * Delete Seed File.
      *
-     * @param $fileName
+     * @param string $fileName
+     *
+     * @return bool
      */
-    public function deleteSeedFiles($fileName)
+    public function deleteSeedFiles(string $fileName) : bool
     {
         $seederFile = $this->getSeederFile($fileName, $this->getSeedFolderPath());
 
         if ($this->filesystem->exists($seederFile)) {
-            $this->filesystem->delete($seederFile);
+            return $this->filesystem->delete($seederFile);
         }
+
+        return false;
     }
 
     /**
      * Generate Seeder Class Name.
      *
-     * @param $modelSlug
-     * @param $suffix
+     * @param string $modelSlug
+     * @param string $suffix
      *
      * @return string
      */
-    public function generateSeederClassName($modelSlug, $suffix) : string
+    public function generateSeederClassName(string $modelSlug, string $suffix) : string
     {
         $modelString = '';
+
         $modelName = explode('-', $modelSlug);
         foreach ($modelName as $modelNameExploded) {
             $modelString .= ucfirst($modelNameExploded);
@@ -102,12 +93,12 @@ class FileSystem
     /**
      * Add Content to Seeder file.
      *
-     * @param $seederFile
-     * @param $seederContents
+     * @param string $seederFile
+     * @param string $seederContents
      *
      * @return int
      */
-    public function addContentToSeederFile($seederFile, $seederContents) : int
+    public function addContentToSeederFile(string $seederFile, string $seederContents) : int
     {
         return $this->filesystem->put($seederFile, $seederContents);
     }
@@ -120,7 +111,7 @@ class FileSystem
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function getFileContent($file)
+    public function getFileContent($file) :string
     {
         return $this->filesystem->get($file);
     }

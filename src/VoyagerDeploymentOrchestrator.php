@@ -35,10 +35,16 @@ class VoyagerDeploymentOrchestrator
     /** @var Application */
     private $app;
 
+    /**
+     * VoyagerDeploymentOrchestrator constructor.
+     *
+     * @param Composer $composer
+     * @param Application $application
+     */
     public function __construct(Composer $composer, Application $application)
     {
         $this->composer = $composer;
-        $this->app = $application;
+        $this->app      = $application;
     }
 
     /**
@@ -55,6 +61,7 @@ class VoyagerDeploymentOrchestrator
         ) {
             return;
         }
+
         try {
             $handler = $this->getHandle($breadChanged->changeType);
 

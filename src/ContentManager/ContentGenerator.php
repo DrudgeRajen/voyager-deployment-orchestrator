@@ -12,7 +12,7 @@ class ContentGenerator
 
     /** @var string Data type Delete Statement */
     const DELETE_STATMENT = <<<'TXT'
-$dataType = DataType::where('name' , '%s')->first();
+$dataType = DataType::where('name', '%s')->first();
 
             if (is_bread_translatable($dataType)) {
                 $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
@@ -52,7 +52,7 @@ TXT;
 $menuItem = MenuItem::where('route', 'voyager.%s.index');
 
         if ($menuItem->exists()) {
-        $menuItem->delete();
+            $menuItem->delete();
         }
 TXT;
 
@@ -77,14 +77,12 @@ TXT;
         $tabCount = 4;
 
         // replace array() with []
-        $content = str_replace('array (', '[', $content);
-        $content = str_replace(')', ']', $content);
-        $lines = explode("\n", $content);
+        $lines   = explode("\n", $content);
 
         for ($i = 1; $i < count($lines); $i++) {
             $lines[$i] = ltrim($lines[$i]);
             // Check for closing bracket
-            if (strpos($lines[$i], ']') !== false) {
+            if (strpos($lines[$i], ')') !== false) {
                 $tabCount--;
             }
 
@@ -104,7 +102,7 @@ TXT;
                 }
             }
             // check for opening bracket
-            if (strpos($lines[$i], '[') !== false) {
+            if (strpos($lines[$i], '(') !== false) {
                 $tabCount++;
             }
         }
@@ -117,6 +115,7 @@ TXT;
      * Get Delete Statement.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function getDeleteStatement($dataType): string
@@ -133,6 +132,7 @@ TXT;
      * Generate Menu Delete Statements.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function generateMenuDeleteStatements($dataType) : string
@@ -167,6 +167,7 @@ TXT;
      * Get Menu Insert Statements.
      *
      * @param $dataType
+     *
      * @return string
      */
     public function getMenuInsertStatements($dataType) : string
@@ -189,15 +190,15 @@ TXT;
      */
     public function generateOrchestraSeederContent($className, $content)
     {
-        if (strpos($className, FilesGenerator::DELETED_SEEDER_SUFFIX) !== false) {
+        if (strpos($className, FileGenerator::DELETED_SEEDER_SUFFIX) !== false) {
             $toBeDeletedClassName = strstr(
                 $className,
-                FilesGenerator::DELETED_SEEDER_SUFFIX,
+                FileGenerator::DELETED_SEEDER_SUFFIX,
                 true
             );
-            $breadTypeAddedClass = $toBeDeletedClassName . FilesGenerator::TYPE_SEEDER_SUFFIX;
+            $breadTypeAddedClass = $toBeDeletedClassName . FileGenerator::TYPE_SEEDER_SUFFIX;
 
-            $breadRowAddedClass = $toBeDeletedClassName . FilesGenerator::ROW_SEEDER_SUFFIX;
+            $breadRowAddedClass = $toBeDeletedClassName . FileGenerator::ROW_SEEDER_SUFFIX;
 
             $content = str_replace("\$this->seed({$breadTypeAddedClass}::class);", '', $content);
             $content = str_replace("\$this->seed({$breadRowAddedClass}::class);", '', $content);

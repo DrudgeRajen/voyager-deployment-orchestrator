@@ -4,28 +4,41 @@ namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Events\BreadChanged;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FilesGenerator;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadDeletedHandler
 {
-    private $deploymentFileGenerator;
+    /** @var FileGenerator */
+    private $fileGenerator;
 
     /**
      * VoyagerDeleted constructor.
-     * @param FilesGenerator $deploymentFilesGenerator
+     *
+     * @param FilesGenerator $fileGenerator
      */
-    public function __construct(FilesGenerator $deploymentFilesGenerator)
+    public function __construct(FileGenerator $fileGenerator)
     {
-        $this->deploymentFileGenerator = $deploymentFilesGenerator;
+        $this->fileGenerator = $fileGenerator;
     }
 
-    public function handle(BreadChanged $breadDataDeleted)
+    /**
+     * Bread Deleted Handler.
+     *
+     * @param BreadChanged $breadDataDeleted
+     *
+     * @return bool
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function handle(BreadChanged $breadDataDeleted) : bool
     {
         $dataType = $breadDataDeleted->dataType;
+
         // Delete Translations, if present
         if (is_bread_translatable($dataType)) {
             $dataType->deleteAttributeTranslations($dataType->getTranslatableAttributes());
         }
+
         $dataType->destroy($dataType->id);
 
         if (! is_null($dataType)) {
@@ -33,10 +46,10 @@ class BreadDeletedHandler
         }
 
         //Finally, We can delete seed files.
-        $this->deploymentFileGenerator->deleteSeedFiles($dataType);
+        $this->fileGenerator->deleteSeedFiles($dataType);
 
         // After deleting seeds file, we create new seed file in order to rollback
         // the seeded data.
-        return $this->deploymentFileGenerator->generateSeedFileForDeletedData($dataType);
+        return $this->fileGenerator->generateSeedFileForDeletedData($dataType);
     }
 }
