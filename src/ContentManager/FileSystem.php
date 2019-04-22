@@ -53,11 +53,13 @@ class FileSystem
     }
 
     /**
-     * Delete Seed File.
+     * Delete Seed File
      *
      * @param string $fileName
+     *
+     * @return bool
      */
-    public function deleteSeedFiles(string $fileName)
+    public function deleteSeedFiles(string $fileName) : bool
     {
         $seederFile = $this->getSeederFile($fileName, $this->getSeedFolderPath());
 
@@ -109,7 +111,7 @@ class FileSystem
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function getFileContent($file)
+    public function getFileContent($file) :string
     {
         return $this->filesystem->get($file);
     }
