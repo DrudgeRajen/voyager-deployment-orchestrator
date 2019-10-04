@@ -1,19 +1,16 @@
 <?php
-$excluded_folders = [
-    'node_modules',
-    'storage',
-    'vendor'
-];
-$finder = PhpCsFixer\Finder::create()
-    ->exclude($excluded_folders)
-    ->in(__DIR__);
+
+$finder = PhpCsFixer\Finder::create()->in(['src']);
+
 return PhpCsFixer\Config::create()
-    ->setRules(array(
+    ->setRules([
         '@PSR2' => true,
         'lowercase_constants' => false,
         'method_argument_space' => false,
-        'concat_space' => ['spacing' => "one"],
-        'align_equals' => true
-    ))
+        'concat_space' => ['spacing' => 'one'],
+        'binary_operator_spaces' => [
+            'align_equals' => true,
+            'align_double_arrow' => true,
+        ],
+    ])
     ->setFinder($finder);
-
