@@ -1,7 +1,7 @@
 [![StyleCI](https://github.styleci.io/repos/159037396/shield?branch=master)](https://github.styleci.io/repos/159037396)
 ### Introduction
 <a href = "https://github.com/the-control-group/voyager">Voyager </a> is an awesome admin tool for laravel.
-It's easy to create admin tool for CMS using it awesome features ```BREAD```.
+It's easy to create admin tool for CMS using its awesome features ```BREAD```.
 
 Voyager has limitation for the deployment (after you finish the work, create bread and need to publish in production. :) )
 
@@ -28,15 +28,15 @@ return [
 ];
 ```
 
-
-After Publishing the ``VoyagerDeploymentOrchestratorSeeder`` class file
-autoload the composer so that laravel knows about the seeder.
+After Publishing the ``VoyagerDeploymentOrchestratorSeeder`` class file,
+autoload composer so that laravel knows about new seeders.
 
 ``composer dump-autoload``
 
+
 ### Usage
 Voyager Fires Events on Insert, Update, and Delete of BREAD.
-This package listens to those events and creates the respective seeder files.
+This package listens to those events and creates respective seeder files.
 
 To run the seeder file :
 
