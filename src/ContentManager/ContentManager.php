@@ -127,7 +127,8 @@ class ContentManager
             unset($dataTypeArray['translations']);
         }
 
-        return $this->populateInsertStatements($stub,
+        return $this->populateInsertStatements(
+            $stub,
             $tableName,
             $dataTypeArray,
             '{{insert_statements}}'
@@ -148,12 +149,14 @@ class ContentManager
         $dataArray = $this->repackContentData($rows->toArray());
         $tableName = $rows->last()->getTable();
 
-        $stub = str_replace('{{datatype_slug_statement}}',
+        $stub = str_replace(
+            '{{datatype_slug_statement}}',
             $this->contentGenerator->getDataTypeSlugStatement($dataType),
             $stub
         );
 
-        return $this->populateInsertStatements($stub,
+        return $this->populateInsertStatements(
+            $stub,
             $tableName,
             $dataArray,
             '{{insert_statements}}'
@@ -173,12 +176,14 @@ class ContentManager
         $stub = $this->populateDeleteStatements($stub, $dataType);
 
         if ($dataType->generate_permissions) {
-            $stub = $this->replaceString('{{permission_delete_statements}}',
+            $stub = $this->replaceString(
+                '{{permission_delete_statements}}',
                 $this->contentGenerator->getPermissionStatement($dataType, 'delete'),
                 $stub
             );
         } else {
-            $stub = $this->replaceString('{{permission_delete_statements}}',
+            $stub = $this->replaceString(
+                '{{permission_delete_statements}}',
                 '',
                 $stub
             );
@@ -202,12 +207,14 @@ class ContentManager
     private function populatePermissionStatements(string $stub, DataType $dataType)
     {
         if ($dataType->generate_permissions) {
-            $stub = $this->replaceString('{{permission_insert_statements}}',
+            $stub = $this->replaceString(
+                '{{permission_insert_statements}}',
                 $this->contentGenerator->getPermissionStatement($dataType),
                 $stub
             );
         } else {
-            $stub = $this->replaceString('{{permission_insert_statements}}',
+            $stub = $this->replaceString(
+                '{{permission_insert_statements}}',
                 '',
                 $stub
             );
@@ -226,7 +233,8 @@ class ContentManager
      */
     private function populateDeleteStatements(string $stub, DataType $dataType)
     {
-        return $this->replaceString('{{delete_statements}}',
+        return $this->replaceString(
+            '{{delete_statements}}',
             $this->contentGenerator->getDeleteStatement($dataType),
             $stub
         );
@@ -242,7 +250,8 @@ class ContentManager
      */
     private function populateMenuStatements(string $stub, DataType $dataType)
     {
-        return $this->replaceString('{{menu_insert_statements}}',
+        return $this->replaceString(
+            '{{menu_insert_statements}}',
             $this->contentGenerator->getMenuInsertStatements($dataType),
             $stub
         );
@@ -259,12 +268,14 @@ class ContentManager
     private function populateTranslationStatements(string $stub, DataType $dataType)
     {
         if (! count($dataType->translations)) {
-            $stub = $this->replaceString('{{translation_insert_statements}}',
+            $stub = $this->replaceString(
+                '{{translation_insert_statements}}',
                 '',
                 $stub
             );
 
-            $stub = $this->replaceString('{{datatype_slug_statements}}',
+            $stub = $this->replaceString(
+                '{{datatype_slug_statements}}',
                 '',
                 $stub
             );
@@ -275,12 +286,14 @@ class ContentManager
         $tableName    = $dataType->translations->last()->getTable();
         $translations = $this->repackContentData($dataType->translations->toArray());
 
-        $stub = $this->replaceString('{{datatype_slug_statements}}',
+        $stub = $this->replaceString(
+            '{{datatype_slug_statements}}',
             $this->contentGenerator->getDataTypeSlugStatement($dataType),
             $stub
         );
 
-        $stub = $this->populateInsertStatements($stub,
+        $stub = $this->populateInsertStatements(
+            $stub,
             $tableName,
             $translations,
             '{{translation_insert_statements}}'

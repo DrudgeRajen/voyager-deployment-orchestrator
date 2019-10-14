@@ -56,8 +56,10 @@ class VoyagerDeploymentOrchestrator
      */
     public function handle(BreadChanged $breadChanged)
     {
-        if (! in_array($breadChanged->dataType->name,
-            config('voyager-deployment-orchestrator.tables'))
+        if (! in_array(
+            $breadChanged->dataType->name,
+            config('voyager-deployment-orchestrator.tables')
+        )
         ) {
             return;
         }

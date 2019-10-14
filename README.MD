@@ -42,6 +42,15 @@ To run the seeder file :
 
 ``php artisan db:seed --class=VoyagerDeploymentOrchestratorSeeder``
 
+### Contribuing
+
+Run phpcs linter to check for any error that may happen during PR.
+
+```composer lint```
+
+Fix errors reported by CI during Pull request.
+
+```composer fix```
 
 ### Future Tasks
 - [x] Generating Seed Files On BREAD Events.
