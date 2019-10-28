@@ -34,5 +34,9 @@
         "DrudgeRajen\\VoyagerDeploymentOrchestrator\\VoyagerDeploymentOrchestratorServiceProvider"
       ]
     }
+  },
+  "scripts": {
+    "lint": "php-cs-fixer fix --diff --dry-run",
+    "fix": "php-cs-fixer fix -vvv"
   }
 }

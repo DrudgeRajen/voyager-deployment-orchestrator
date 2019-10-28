@@ -1,6 +1,7 @@
 [![StyleCI](https://github.styleci.io/repos/159037396/shield?branch=master)](https://github.styleci.io/repos/159037396)
 
 ### Introduction
+
 <a href = "https://github.com/the-control-group/voyager">Voyager </a> is an awesome admin tool for laravel.
 It is very easy to create admin tool for CMS using Voyager's awesome feature [BREAD](https://voyager.readme.io/docs/bread).
 
@@ -41,6 +42,16 @@ This package listens for those events and creates respective seeder files.
 #### To run the seeder file:
 
 ```php artisan db:seed --class=VoyagerDeploymentOrchestratorSeeder```
+
+### Contributing
+
+Run phpcs linter to check for any error that may happen during PR.
+
+```composer lint```
+
+Fix errors reported by CI during Pull request.
+
+```composer fix```
 
 ### Future Tasks
 - [x] Generating Seed Files On BREAD Events.
