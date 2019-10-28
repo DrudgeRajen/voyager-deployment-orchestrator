@@ -96,7 +96,8 @@ class FileGenerator
 
         $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
-        $seedContent = $this->contentManager->populateContentToStubFile($seederClassName,
+        $seedContent = $this->contentManager->populateContentToStubFile(
+            $seederClassName,
             $stub,
             $dataType,
             self::ROW_SEEDER_SUFFIX
@@ -156,11 +157,13 @@ class FileGenerator
      */
     public function deleteSeedFiles(DataType $dataType)
     {
-        $dataTypSeederClass = $this->fileSystem->generateSeederClassName($dataType->slug,
+        $dataTypSeederClass = $this->fileSystem->generateSeederClassName(
+            $dataType->slug,
             self::TYPE_SEEDER_SUFFIX
         );
 
-        $dataRowSeederClass = $this->fileSystem->generateSeederClassName($dataType->slug,
+        $dataRowSeederClass = $this->fileSystem->generateSeederClassName(
+            $dataType->slug,
             self::ROW_SEEDER_SUFFIX
         );
 
@@ -193,7 +196,8 @@ class FileGenerator
 
         $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
-        $seedContent = $this->contentManager->populateContentToStubFile($seederClassName,
+        $seedContent = $this->contentManager->populateContentToStubFile(
+            $seederClassName,
             $stub,
             $dataType,
             self::DELETED_SEEDER_SUFFIX
