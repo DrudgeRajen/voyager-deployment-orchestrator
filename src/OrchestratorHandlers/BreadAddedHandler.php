@@ -31,10 +31,10 @@ class BreadAddedHandler
     {
         $dataType = $breadAdded->dataType;
 
-        //Generate Data Type Seeder File.
+        // Generate Data Type Seeder File.
         $this->filesGenerator->generateDataTypeSeedFile($dataType);
 
-        //Generate Data Row Seeder File.
+        // Generate Data Row Seeder File.
         return $this->filesGenerator->generateDataRowSeedFile($dataType);
     }
 }

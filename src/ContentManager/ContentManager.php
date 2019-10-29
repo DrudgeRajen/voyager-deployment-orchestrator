@@ -121,11 +121,9 @@ class ContentManager
 
         $dataTypeArray = $dataType->toArray();
 
-        //Here, we cannot do $dataType->unsetRelations('translations)
-        // because voyager first fire events and then save the translations.
-        if (isset($dataTypeArray['translations'])) {
-            unset($dataTypeArray['translations']);
-        }
+        // Here, we cannot do $dataType->unsetRelations('translations')
+        // because voyager first fires events and then saves translations.
+        unset($dataTypeArray['translations']);
 
         return $this->populateInsertStatements(
             $stub,
@@ -307,7 +305,7 @@ class ContentManager
      *
      * @param string $stub
      * @param string $tableName
-     * @param $dataTypeArray
+     * @param array $dataTypeArray
      *
      * @return mixed|string
      */
@@ -330,8 +328,8 @@ class ContentManager
     /**
      * Replace String.
      *
-     * @param $search
-     * @param $replace
+     * @param string $search
+     * @param string $replace
      * @param $stub
      *
      * @return mixed
