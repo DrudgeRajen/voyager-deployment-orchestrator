@@ -1,7 +1,13 @@
 {
   "name": "drudge-rajen/voyager-deployment-orchestrator",
   "description": "Package for Voyager BREAD Deployment.",
-  "keywords": ["laravel", "voyager", "voyager-deployment", "voyager-seeder", "bread-seeder"],
+  "keywords": [
+    "laravel",
+    "voyager",
+    "voyager-deployment",
+    "voyager-seeder",
+    "bread-seeder"
+  ],
   "type": "library",
   "license": "MIT",
   "require": {

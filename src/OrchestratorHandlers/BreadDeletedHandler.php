@@ -45,7 +45,7 @@ class BreadDeletedHandler
             Voyager::model('Permission')->removeFrom($dataType->name);
         }
 
-        //Finally, We can delete seed files.
+        // Finally, We can delete seed files.
         $this->fileGenerator->deleteSeedFiles($dataType);
 
         // After deleting seeds file, we create new seed file in order to rollback
