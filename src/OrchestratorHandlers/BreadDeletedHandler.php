@@ -2,9 +2,9 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
-use Illuminate\Support\Facades\Artisan;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Events\BreadChanged;
+use Illuminate\Support\Facades\Artisan;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadDeletedHandler
