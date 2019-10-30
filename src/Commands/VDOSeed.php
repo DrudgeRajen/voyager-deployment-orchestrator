@@ -3,8 +3,8 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\Commands;
 
 use Exception;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 use Illuminate\Console\Command;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class VDOSeed extends Command
 {
@@ -46,7 +46,7 @@ class VDOSeed extends Command
      */
     public function handle()
     {
-        $tables = explode(",", $this->argument('tables'));
+        $tables = explode(',', $this->argument('tables'));
 
         try {
             foreach ($tables as $table) {
@@ -55,7 +55,7 @@ class VDOSeed extends Command
                     $this->fileGenerator->generateVDOSeedFile($table, $this->suffix)
                 );
             }
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             $this->printResult($table, false);
         }
     }
@@ -75,5 +75,4 @@ class VDOSeed extends Command
 
         $this->error("Could not create seed file from table {$table}");
     }
-
 }

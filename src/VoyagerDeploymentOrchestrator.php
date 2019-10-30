@@ -65,7 +65,6 @@ class VoyagerDeploymentOrchestrator
             if ($handler) {
                 $handler->handle($breadChanged);
             }
-
         } catch (Exception $e) {
             throw new OrchestratorHandlerNotFoundException($e->getMessage());
         }

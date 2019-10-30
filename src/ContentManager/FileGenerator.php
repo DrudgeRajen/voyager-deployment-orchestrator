@@ -3,9 +3,9 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
 use Exception;
-use Illuminate\Database\DatabaseManager;
 use TCG\Voyager\Models\DataType;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\DatabaseManager;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
 
 class FileGenerator
@@ -246,7 +246,7 @@ class FileGenerator
      */
     public function generateVDOSeedFile(string $tableName, string $suffix) : bool
     {
-        if (!Schema::hasTable($tableName)) {
+        if (! Schema::hasTable($tableName)) {
             throw new Exception(sprintf('%s table does\'nt exist.'));
         }
 
@@ -279,12 +279,12 @@ class FileGenerator
      */
     public function repackSeedData($data) : array
     {
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             $data = $data->toArray();
         }
 
         $dataArray = [];
-        if (!empty($data)) {
+        if (! empty($data)) {
             foreach ($data as $row) {
                 $rowArray = [];
                 foreach ($row as $columnName => $columnValue) {

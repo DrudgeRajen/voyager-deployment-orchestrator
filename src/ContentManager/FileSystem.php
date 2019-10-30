@@ -2,8 +2,8 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger;
 
-use Illuminate\Filesystem\Filesystem as LaravelFileSystem;
 use Illuminate\Support\Composer;
+use Illuminate\Filesystem\Filesystem as LaravelFileSystem;
 
 class FileSystem
 {
@@ -105,8 +105,7 @@ class FileSystem
      */
     public function addContentToSeederFile(string $seederFile, string $seederContents) : bool
     {
-        if (!$this->filesystem->put($seederFile, $seederContents))
-        {
+        if (! $this->filesystem->put($seederFile, $seederContents)) {
             return false;
         }
 
