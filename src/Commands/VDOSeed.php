@@ -2,7 +2,8 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\Commands;
 
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
+use Exception;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 use Illuminate\Console\Command;
 
 class VDOSeed extends Command
@@ -23,15 +24,19 @@ class VDOSeed extends Command
      */
     protected $description = 'Generate Seed files for voyager tables, except for BREAD.';
 
+    /** @var FileGenerator */
+    private $fileGenerator;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(FileSystem $fileSystem)
+    public function __construct(FileGenerator $fileGenerator)
     {
         parent::__construct();
-        $this->fileSystem = $fileSystem;
+
+        $this->fileGenerator = $fileGenerator;
     }
 
     /**
@@ -43,9 +48,32 @@ class VDOSeed extends Command
     {
         $tables = explode(",", $this->argument('tables'));
 
-        foreach($tables as $table) {
-            $this->fileSystem->generateSeederClassName($table, $this->suffix);
+        try {
+            foreach ($tables as $table) {
+                $this->printResult(
+                    $table,
+                    $this->fileGenerator->generateVDOSeedFile($table, $this->suffix)
+                );
+            }
+        } catch(Exception $exception) {
+            $this->printResult($table, false);
         }
+    }
+
+    /**
+     * Print Result
+     *
+     * @param string $table
+     * @param bool $isSuccess
+     */
+    public function printResult(string $table, bool $isSuccess=true)
+    {
+        if ($isSuccess) {
+            $this->info("Created a seed file from table {$table}");
+            return;
+        }
+
+        $this->error("Could not create seed file from table {$table}");
     }
 
 }

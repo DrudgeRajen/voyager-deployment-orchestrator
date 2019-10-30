@@ -2,7 +2,10 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
+use Exception;
+use Illuminate\Database\DatabaseManager;
 use TCG\Voyager\Models\DataType;
+use Illuminate\Support\Facades\Schema;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
 
 class FileGenerator
@@ -22,16 +25,23 @@ class FileGenerator
     /** @var FileSystem */
     private $fileSystem;
 
+    /** @var DatabaseManager */
+    private $databaseManager;
+
     /**
      * FilesGenerator constructor.
      *
      * @param ContentManager $contentManager
      * @param FileSystem $deploymentFileSystem
      */
-    public function __construct(ContentManager $contentManager, FileSystem $fileSystem)
-    {
-        $this->contentManager = $contentManager;
-        $this->fileSystem     = $fileSystem;
+    public function __construct(
+        ContentManager $contentManager,
+        FileSystem $fileSystem,
+        DatabaseManager $databaseManager
+    ) {
+        $this->contentManager  = $contentManager;
+        $this->fileSystem      = $fileSystem;
+        $this->databaseManager = $databaseManager;
     }
 
     /**
@@ -58,8 +68,9 @@ class FileGenerator
 
         $dataType->details = json_encode($dataType->details);
 
+        $stub = $this->contentManager->replaceString('{{class}}', $seederClassName, $stub);
+
         $seedContent = $this->contentManager->populateContentToStubFile(
-            $seederClassName,
             $stub,
             $dataType,
             self::TYPE_SEEDER_SUFFIX
@@ -96,8 +107,9 @@ class FileGenerator
 
         $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
+        $stub = $this->contentManager->replaceString('{{class}}', $seederClassName, $stub);
+
         $seedContent = $this->contentManager->populateContentToStubFile(
-            $seederClassName,
             $stub,
             $dataType,
             self::ROW_SEEDER_SUFFIX
@@ -147,7 +159,7 @@ class FileGenerator
 
         $content = $this->contentManager->updateDeploymentOrchestraSeederContent($className, $content);
 
-        return $this->fileSystem->addContentToSeederFile($file, $content) !== false;
+        return $this->fileSystem->addContentToSeederFile($file, $content);
     }
 
     /**
@@ -196,8 +208,9 @@ class FileGenerator
 
         $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
 
+        $stub = $this->contentManager->replaceString('{{class}}', $seederClassName, $stub);
+
         $seedContent = $this->contentManager->populateContentToStubFile(
-            $seederClassName,
             $stub,
             $dataType,
             self::DELETED_SEEDER_SUFFIX
@@ -222,5 +235,65 @@ class FileGenerator
         }
 
         return $seedContent;
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $suffix
+     * @return bool
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function generateVDOSeedFile(string $tableName, string $suffix) : bool
+    {
+        if (!Schema::hasTable($tableName)) {
+            throw new Exception(sprintf('%s table does\'nt exist.'));
+        }
+
+        $data = $this->repackSeedData($this->databaseManager->table($tableName)->get());
+
+        $seederClassName = $this->fileSystem->generateSeederClassName($tableName, $suffix);
+
+        $stub = $this->fileSystem->getFileContent(
+            $this->fileSystem->getStubPath() . '../stubs/seed.stub'
+        );
+
+        $seedFolderPath = $this->fileSystem->getSeedFolderPath();
+
+        $seederFile = $this->fileSystem->getSeederFile($seederClassName, $seedFolderPath);
+
+        $stub = $this->contentManager->replaceString('{{class}}', $seederClassName, $stub);
+        $stub = $this->contentManager->replaceString('{{table}}', $tableName, $stub);
+
+        $seedContent = $this->contentManager->populateTableContentToSeeder($stub, $tableName, $data);
+
+        return $this->fileSystem->addContentToSeederFile($seederFile, $seedContent);
+    }
+
+    /**
+     * Repacks data read from the database
+     *
+     * @param  array|object $data
+     *
+     * @return array
+     */
+    public function repackSeedData($data) : array
+    {
+        if (!is_array($data)) {
+            $data = $data->toArray();
+        }
+
+        $dataArray = [];
+        if (!empty($data)) {
+            foreach ($data as $row) {
+                $rowArray = [];
+                foreach ($row as $columnName => $columnValue) {
+                    $rowArray[$columnName] = $columnValue;
+                }
+                $dataArray[] = $rowArray;
+            }
+        }
+
+        return $dataArray;
     }
 }

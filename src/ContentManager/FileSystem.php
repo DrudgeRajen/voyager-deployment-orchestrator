@@ -3,20 +3,25 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger;
 
 use Illuminate\Filesystem\Filesystem as LaravelFileSystem;
+use Illuminate\Support\Composer;
 
 class FileSystem
 {
     /** @var LaravelFileSystem */
     private $filesystem;
 
+    /** @var Composer */
+    private $composer;
+
     /**
      * Create the event listener.
      *
      * @param LaravelFileSystem $filesystem
      */
-    public function __construct(LaravelFileSystem $filesystem)
+    public function __construct(LaravelFileSystem $filesystem, Composer $composer)
     {
         $this->filesystem = $filesystem;
+        $this->composer   = $composer;
     }
 
     /**
@@ -96,11 +101,18 @@ class FileSystem
      * @param string $seederFile
      * @param string $seederContents
      *
-     * @return int
+     * @return bool
      */
-    public function addContentToSeederFile(string $seederFile, string $seederContents) : int
+    public function addContentToSeederFile(string $seederFile, string $seederContents) : bool
     {
-        return $this->filesystem->put($seederFile, $seederContents);
+        if (!$this->filesystem->put($seederFile, $seederContents))
+        {
+            return false;
+        }
+
+        $this->composer->dumpAutoloads();
+
+        return true;
     }
 
     /**

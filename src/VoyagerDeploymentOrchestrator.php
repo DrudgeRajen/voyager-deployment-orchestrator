@@ -3,7 +3,6 @@
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator;
 
 use Exception;
-use Illuminate\Support\Composer;
 use TCG\Voyager\Events\BreadChanged;
 use Illuminate\Foundation\Application;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers\BreadAddedHandler;
@@ -29,9 +28,6 @@ class VoyagerDeploymentOrchestrator
         self::BREAD_DELETED => BreadDeletedHandler::class,
     ];
 
-    /** @var Composer */
-    private $composer;
-
     /** @var Application */
     private $app;
 
@@ -41,9 +37,8 @@ class VoyagerDeploymentOrchestrator
      * @param Composer $composer
      * @param Application $application
      */
-    public function __construct(Composer $composer, Application $application)
+    public function __construct(Application $application)
     {
-        $this->composer = $composer;
         $this->app      = $application;
     }
 
@@ -70,8 +65,7 @@ class VoyagerDeploymentOrchestrator
             if ($handler) {
                 $handler->handle($breadChanged);
             }
-            // Run composer dump-auto
-            $this->composer->dumpAutoloads();
+
         } catch (Exception $e) {
             throw new OrchestratorHandlerNotFoundException($e->getMessage());
         }
