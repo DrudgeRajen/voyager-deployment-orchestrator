@@ -43,13 +43,14 @@ This package listens for those events and creates respective seeder files.
 
 ```php artisan db:seed --class=VoyagerDeploymentOrchestratorSeeder```
 
-### Generating seeder files for table
+### Generating seeder files for tables
 VDO also provides an artisan command to generate the seed file for table.
-In order to generate the seeder file for tables
+In order to generate the seeder file for tables,
 
 ```php artisan vdo:generate table-name1```
 
 It also supports the generation for multiple tables.
+
 ``` php artisan vdo:generate table-name1,table-name2,table-name3```
 
 VDO seed generator command will keep the generated seed files inside `/database/seeds/breads` with prefix `TableSeeder`
