@@ -13,7 +13,7 @@ $config = PhpCsFixer\Config::create()
         'method_argument_space' => false,
         'single_quote' => true,
         'concat_space' => ['spacing' => 'one'],
-        'list_syntax' => ['syntax' => 'long'],
+        'list_syntax' => ['syntax' => 'short'],
         'no_extra_blank_lines' => ['extra'],
         'ordered_imports' => [
           'sort_algorithm' => 'length'
