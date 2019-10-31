@@ -39,9 +39,24 @@ autoload composer so that laravel knows about new seeders.
 Voyager Fires Events on Insert, Update, and Delete of BREAD.
 This package listens for those events and creates respective seeder files.
 
-#### To run the seeder file:
+### To run the seeder file:
 
 ```php artisan db:seed --class=VoyagerDeploymentOrchestratorSeeder```
+
+### Generating seeder files for table
+VDO also provides an artisan command to generate the seed file for table.
+In order to generate the seeder file for tables
+
+```php artisan vdo:generate table-name1```
+
+It also supports the generation for multiple tables.
+``` php artisan vdo:generate table-name1,table-name2,table-name3```
+
+VDO seed generator command will keep the generated seed files inside `/database/seeds/breads` with prefix `TableSeeder`
+
+***Note:*** VDO seed generator will not add the seeder file in `VoyagerDeploymentOrchestratorSeeder.php` class automatically, because
+this class in only used for BREAD seeders not the tables seeder. If you want to run all the vdo generated seeder at once,
+please add those in `DatabaseSeeder.php` class.
 
 ### Contributing
 
@@ -54,6 +69,4 @@ Fix errors reported by CI during Pull request.
 ```composer fix```
 
 ### Future Tasks
-- [x] Generating Seed Files On BREAD Events.
-
 - [ ] Writing Tests
