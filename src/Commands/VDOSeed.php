@@ -61,7 +61,7 @@ class VDOSeed extends Command
     }
 
     /**
-     * Print Result
+     * Print Result.
      *
      * @param string $table
      * @param bool $isSuccess
@@ -70,6 +70,7 @@ class VDOSeed extends Command
     {
         if ($isSuccess) {
             $this->info("Created a seed file from table {$table}");
+
             return;
         }
 

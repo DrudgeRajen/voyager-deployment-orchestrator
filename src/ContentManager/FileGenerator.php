@@ -271,7 +271,7 @@ class FileGenerator
     }
 
     /**
-     * Repacks data read from the database
+     * Repacks data read from the database.
      *
      * @param  array|object $data
      *
