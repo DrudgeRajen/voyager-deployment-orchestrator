@@ -23,6 +23,8 @@ class VoyagerDeploymentOrchestratorServiceProvider extends ServiceProvider
         foreach ($publishable as $group => $paths) {
             $this->publishes($paths, $group);
         }
+
+        $this->commands(Commands\VDOSeed::class);
     }
 
     public function register()

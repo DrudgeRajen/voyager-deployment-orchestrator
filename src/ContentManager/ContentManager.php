@@ -59,7 +59,6 @@ class ContentManager
     /**
      * Populate Content To Stub File.
      *
-     * @param string $className
      * @param string $stub
      * @param DataType $dataType
      * @param string $suffix
@@ -67,13 +66,10 @@ class ContentManager
      * @return mixed|string
      */
     public function populateContentToStubFile(
-        string $className,
         string $stub,
         DataType $dataType,
         string $suffix
     ) {
-        $stub = $this->replaceString('{{class}}', $className, $stub);
-
         switch ($suffix) {
             case FileGenerator::TYPE_SEEDER_SUFFIX:
                 $stub = $this->populateDataTypeSeederContent($stub, $dataType);
@@ -334,8 +330,13 @@ class ContentManager
      *
      * @return mixed
      */
-    private function replaceString($search, $replace, $stub)
+    public function replaceString($search, $replace, $stub)
     {
         return str_replace($search, $replace, $stub);
+    }
+
+    public function populateTableContentToSeeder(string $stub, string $tableName, array $data)
+    {
+        return $this->populateInsertStatements($stub, $tableName, $data, '{{insert_statements}}');
     }
 }
