@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Seeder;
 use TCG\Voyager\Models\DataType;
 use TCG\Voyager\Facades\Voyager;
@@ -25,6 +26,9 @@ class {{class}} extends Seeder
         {{permission_delete_statements}}
 
         {{menu_delete_statements}}
+
+        // Since, voyager cache the menu, after seed deletion we clear admin menu cache as well.
+        Artisan::call('cache:forget', ['key' => 'voyager_menu_admin']);
        } catch(Exception $e) {
          throw new Exception('Exception occur ' . $e);
 

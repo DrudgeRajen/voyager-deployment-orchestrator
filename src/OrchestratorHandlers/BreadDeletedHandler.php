@@ -4,6 +4,7 @@ namespace DrudgeRajen\VoyagerDeploymentOrchestrator\OrchestratorHandlers;
 
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Events\BreadChanged;
+use Illuminate\Support\Facades\Artisan;
 use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileGenerator;
 
 class BreadDeletedHandler
@@ -47,6 +48,9 @@ class BreadDeletedHandler
 
         // Finally, We can delete seed files.
         $this->fileGenerator->deleteSeedFiles($dataType);
+
+        // Since, voyager cache the menu, after seed deletion we clear admin menu cache as well.
+        Artisan::call('cache:forget', ['key' => 'voyager_menu_admin']);
 
         // After deleting seeds file, we create new seed file in order to rollback
         // the seeded data.
