@@ -113,7 +113,7 @@ class ContentManager
         $stub      = $this->populatePermissionStatements($stub, $dataType);
         $stub      = $this->populateMenuStatements($stub, $dataType);
 
-        list($dataType, $stub) = $this->populateTranslationStatements($stub, $dataType);
+        [$dataType, $stub] = $this->populateTranslationStatements($stub, $dataType);
 
         $dataTypeArray = $dataType->toArray();
 
