@@ -2,6 +2,8 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
+use Carbon\Carbon;
+use Illuminate\Foundation\Application;
 use TCG\Voyager\Models\DataType;
 
 class ContentManager
@@ -116,6 +118,11 @@ class ContentManager
         [$dataType, $stub] = $this->populateTranslationStatements($stub, $dataType);
 
         $dataTypeArray = $dataType->toArray();
+
+        if (version_compare(Application::VERSION, '7.0') >= 0) {
+            $dataTypeArray['created_at'] = Carbon::parse($dataTypeArray['created_at'])->format('Y-m-d H:i:s');
+            $dataTypeArray['updated_at'] = Carbon::parse($dataTypeArray['updated_at'])->format('Y-m-d H:i:s');
+        }
 
         // Here, we cannot do $dataType->unsetRelations('translations')
         // because voyager first fires events and then saves translations.
