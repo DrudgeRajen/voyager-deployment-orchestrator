@@ -1,6 +1,6 @@
 <?php
 
-namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger;
+namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
 use Illuminate\Support\Composer;
 use Illuminate\Filesystem\Filesystem as LaravelFileSystem;
