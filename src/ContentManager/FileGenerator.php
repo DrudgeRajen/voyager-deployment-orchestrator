@@ -6,7 +6,7 @@ use Exception;
 use TCG\Voyager\Models\DataType;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\DatabaseManager;
-use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManger\FileSystem;
+use DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager\FileSystem;
 
 class FileGenerator
 {
