@@ -120,8 +120,8 @@ class ContentManager
         $dataTypeArray = $dataType->toArray();
 
         if (version_compare(Application::VERSION, '7.0') >= 0) {
-            $dataTypeArray['created_at'] = Carbon::parse($dataTypeArray['created_at'])->format('Y-m-d H:i:s');
-            $dataTypeArray['updated_at'] = Carbon::parse($dataTypeArray['updated_at'])->format('Y-m-d H:i:s');
+            $dataTypeArray['created_at'] = $dataType->created_at->toDateTimeString();
+            $dataTypeArray['updated_at'] = $dataType->updated_at->toDateTimeString();
         }
 
         // Here, we cannot do $dataType->unsetRelations('translations')
