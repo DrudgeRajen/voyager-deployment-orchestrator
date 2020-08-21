@@ -2,7 +2,6 @@
 
 namespace DrudgeRajen\VoyagerDeploymentOrchestrator\ContentManager;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use TCG\Voyager\Models\DataType;
 
