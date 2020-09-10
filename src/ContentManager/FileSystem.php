@@ -44,7 +44,7 @@ class FileSystem
      */
     public function getSeedFolderPath() : string
     {
-        return base_path() . '/database/seeds/breads';
+        return base_path() . '/database/seeders/breads';
     }
 
     /**
